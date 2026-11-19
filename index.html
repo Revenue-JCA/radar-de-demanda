@@ -578,6 +578,31 @@ html.embed .mod-head { top: 16px; }
 .dp-g button i { position: absolute; bottom: 4px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--muted); }
 .dp-g button i.hi { background: var(--accent); }
 
+/* exportar: janela de escolha */
+.xd { width: min(720px, calc(100vw - 24px)); max-height: calc(100vh - 32px); padding: 0; border: 1px solid var(--glass-line); border-radius: 28px; color: var(--white);
+  background: color-mix(in srgb, var(--card-solid) 94%, transparent); backdrop-filter: blur(28px) saturate(150%); -webkit-backdrop-filter: blur(28px) saturate(150%); box-shadow: var(--glass-shadow); overflow: auto; }
+.xd::backdrop { background: rgba(0, 0, 0, .55); backdrop-filter: blur(6px); }
+.xd[open] { animation: theater-rise .45s var(--ease) both; }
+.xd-in { display: grid; gap: 20px; padding: 26px 28px 22px; }
+.xd-h { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.xd-h h2 { margin: 4px 0 0; font-size: 22px; font-weight: 600; letter-spacing: -.02em; }
+.xd-h p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+.xd-sec { display: grid; gap: 10px; }
+.xd-sec > b { color: var(--faint); font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+.xd-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.xd-row input[type=date] { min-height: 32px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 999px; background: transparent; color: var(--white); font-size: 12.5px; color-scheme: inherit; }
+.xd-checks { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.xd-check { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 18px; cursor: pointer; transition: border-color .2s, background .2s; }
+.xd-check:hover { border-color: var(--line-strong); }
+.xd-check input { appearance: none; flex: none; display: grid; place-items: center; width: 18px; height: 18px; margin: 1px 0 0; border: 1.5px solid var(--line-strong); border-radius: 50%; transition: background .2s, border-color .2s; }
+.xd-check input:checked { background: var(--accent); border-color: var(--accent); }
+.xd-check input:checked::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--on-accent); }
+.xd-check:has(input:checked) { border-color: var(--accent-line); background: var(--accent-soft); }
+.xd-check span { display: grid; gap: 1px; font-size: 13px; font-weight: 600; }
+.xd-check small { color: var(--muted); font-size: 11.5px; font-weight: 400; }
+.xd-f { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--line); }
+.xd-f .count { font-size: 12.5px; }
+
 /* tooltip e aviso */
 #tip { position: fixed; z-index: 90; max-width: 320px; padding: 10px 20px; border: 1px solid var(--line-strong); border-radius: 22px; background: var(--panel); color: var(--white); font-size: 12px; line-height: 1.45; white-space: pre-line; pointer-events: none;
   clip-path: inset(0 0 100% 0); transform: translateY(4px); transition: clip-path .15s, transform .15s; }
@@ -822,6 +847,26 @@ html[data-motion="theme"] { view-transition-name: root; }
 <div class="scrim" id="scrim"></div>
 <aside class="det" id="det" aria-label="Detalhes" aria-hidden="true"></aside>
 <div class="exp" id="exp" aria-hidden="true"></div>
+<dialog class="xd" id="xd" aria-label="Exportar">
+  <form method="dialog" class="xd-in" id="xdForm">
+    <div class="xd-h"><div><p class="eyebrow">Hélios · Radar de Demanda</p><h2>Exportar</h2><p>Escolha o período, as praças e o que entra. O PowerPoint sai editável: textos, tabelas e gráficos nativos.</p></div><button type="button" class="btn round" data-xd="close" aria-label="Fechar">✕</button></div>
+    <div class="xd-sec"><b>Período</b><div class="xd-row"><div class="seg" id="xdPer"><button type="button" data-v="7">Próximos 7 dias</button><button type="button" data-v="mes">Este mês</button><button type="button" data-v="prox">Próximo mês</button><button type="button" data-v="30">Próximos 30 dias</button><button type="button" data-v="custom">Datas</button></div>
+      <span id="xdDates" hidden><input type="date" id="xdFrom" aria-label="De"> <span class="mut">até</span> <input type="date" id="xdTo" aria-label="Até"></span></div></div>
+    <div class="xd-sec"><b>Praças</b><div class="xd-row" id="xdPlaces"></div></div>
+    <div class="xd-sec"><b>O que entra</b><div class="xd-checks" id="xdWhat">
+      <label class="xd-check"><input type="checkbox" value="resumo" checked><span>Resumo<small>números do período e os mais fortes</small></span></label>
+      <label class="xd-check"><input type="checkbox" value="pressao" checked><span>Pressão de demanda<small>gráfico dia a dia</small></span></label>
+      <label class="xd-check"><input type="checkbox" value="picos" checked><span>Janelas de pico<small>dias seguidos de pressão alta</small></span></label>
+      <label class="xd-check"><input type="checkbox" value="destaques" checked><span>Destaques<small>os maiores eventos, com foto</small></span></label>
+      <label class="xd-check"><input type="checkbox" value="agenda" checked><span>Agenda<small>tabela com todos os eventos</small></span></label>
+      <label class="xd-check"><input type="checkbox" value="calendario"><span>Calendário<small>um mês por slide</small></span></label>
+      <label class="xd-check"><input type="checkbox" value="previsao" checked><span>Previsão do tempo<small>14 dias por praça, com gráfico</small></span></label>
+      <label class="xd-check"><input type="checkbox" value="feriados" checked><span>Feriados<small>tempo de todas as praças</small></span></label>
+    </div></div>
+    <div class="xd-sec"><b>Formato</b><div class="xd-row"><div class="seg" id="xdFmt"><button type="button" data-v="pptx">PowerPoint editável</button><button type="button" data-v="png">Imagem PNG</button></div></div></div>
+    <div class="xd-f"><span class="count" id="xdCount"></span><div class="xd-row"><button type="button" class="btn" data-xd="close">Cancelar</button><button type="button" class="btn pri" id="xdGo">Gerar</button></div></div>
+  </form>
+</dialog>
 <div class="toast" id="toast" role="status"></div>
 <div id="tip" role="tooltip"></div>
 
@@ -1866,6 +1911,248 @@ function openHelp() {
 function openSide() { $('det').classList.add('on'); $('det').setAttribute('aria-hidden', 'false'); $('scrim').classList.add('on'); }
 function closeDetail() { $('det').classList.remove('on'); $('det').setAttribute('aria-hidden', 'true'); $('scrim').classList.remove('on'); detailNow = null; }
 
+/* ---------- exportar: escolha do que entra + PowerPoint editável ---------- */
+const XD = { per: '7', from: '', to: '', places: new Set(), fmt: 'pptx' };
+function xdRange() {
+  const t = asDate(TODAY), y = t.getFullYear(), m = t.getMonth();
+  if (XD.per === 'mes') return [TODAY, iso(new Date(y, m + 1, 0, 12))];
+  if (XD.per === 'prox') return [iso(new Date(y, m + 1, 1, 12)), iso(new Date(y, m + 2, 0, 12))];
+  if (XD.per === 'custom' && XD.from && XD.to) return XD.from <= XD.to ? [XD.from, XD.to] : [XD.to, XD.from];
+  return [TODAY, addDays(TODAY, Number(XD.per === 'custom' ? 30 : XD.per) - 1)];
+}
+const xdPlaceOk = (e) => !XD.places.size || XD.places.has(e.p) || e.p === 'Nacional' || e.p === 'Multi';
+function xdEvents() { const [a, b] = xdRange(); return EV().filter((e) => e.d <= b && end(e) >= a && xdPlaceOk(e)).sort((x, y) => x.d.localeCompare(y.d) || y.i - x.i); }
+const xdCities = () => (XD.places.size ? wxCityList().filter((c) => XD.places.has(c)) : wxCityList());
+const xdWhat = () => new Set($$('#xdWhat input:checked').map((i) => i.value));
+const periodName = () => { const [a, b] = xdRange(); return a === b ? label(a) : `${short(a)} a ${short(b)} de ${b.slice(0, 4)}`; };
+function paintXd() {
+  $$('#xdPer button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === XD.per)));
+  $$('#xdFmt button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === XD.fmt)));
+  $('xdDates').hidden = XD.per !== 'custom';
+  $('xdPlaces').innerHTML = `<button type="button" class="chip" data-p="" aria-pressed="${!XD.places.size}">Todas</button>` + wxCities().map((c) => `<button type="button" class="chip" data-p="${esc(c)}" aria-pressed="${XD.places.has(c)}">${esc(c)}</button>`).join('');
+  const n = xdEvents().length;
+  $('xdCount').innerHTML = `<b>${n}</b> ${n === 1 ? 'evento' : 'eventos'} · ${esc(periodName())}`;
+}
+function openExport() {
+  XD.places = new Set(st.place ? [st.place] : []);
+  if (!XD.from) { XD.from = TODAY; XD.to = addDays(TODAY, 30); $('xdFrom').value = XD.from; $('xdTo').value = XD.to; }
+  paintXd();
+  $('xd').showModal();
+}
+$('xdPer').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (b) { XD.per = b.dataset.v; paintXd(); } });
+$('xdFmt').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (b) { XD.fmt = b.dataset.v; paintXd(); } });
+$('xdPlaces').addEventListener('click', (e) => { const b = e.target.closest('button[data-p]'); if (!b) return; if (!b.dataset.p) XD.places.clear(); else if (XD.places.has(b.dataset.p)) XD.places.delete(b.dataset.p); else XD.places.add(b.dataset.p); paintXd(); });
+['xdFrom', 'xdTo'].forEach((id) => $(id).addEventListener('change', () => { XD.from = $('xdFrom').value; XD.to = $('xdTo').value; paintXd(); }));
+$('xd').addEventListener('click', (e) => { if (e.target.closest('[data-xd="close"]') || e.target === $('xd')) $('xd').close(); });
+$('xdGo').addEventListener('click', async () => {
+  const evs = xdEvents();
+  if (!evs.length && !xdWhat().has('previsao')) { toast('Nada para exportar com estas escolhas.'); return; }
+  $('xd').close();
+  if (XD.fmt === 'png') { exportPng(evs.slice(0, 12), false, periodName()); return; }
+  try { await exportPptx(); } catch (err) { console.error(err); toast('Não consegui gerar o PowerPoint.'); }
+});
+
+function loadScript(src, test) { return test() ? Promise.resolve() : new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = () => res(); s.onerror = () => rej(new Error('script')); document.head.appendChild(s); }); }
+async function toDataURL(url) {
+  try { const r = await fetch(new URL(url, document.baseURI).href, { mode: 'cors' }); if (!r.ok) return null; const b = await r.blob(); return await new Promise((res) => { const f = new FileReader(); f.onload = () => res(f.result); f.readAsDataURL(b); }); } catch { return null; }
+}
+async function sunPng(size = 512) {
+  const img = new Image(); img.src = sunDataURI();
+  await new Promise((r) => { img.onload = img.onerror = r; });
+  const c = document.createElement('canvas'); c.width = c.height = size; c.getContext('2d').drawImage(img, 0, 0, size, size);
+  return c.toDataURL('image/png');
+}
+const wxWord = (r) => (r ? WXL[r.c] || 'Tempo' : '—');
+async function exportPptx() {
+  toast('Montando o PowerPoint…');
+  await loadScript('https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js', () => window.PptxGenJS);
+  const what = xdWhat(), evs = xdEvents(), [a, b] = xdRange(), cities = xdCities();
+  const C = { bg: '050506', panel: '111214', line: '24262A', ink: 'F3F5F7', ink2: 'C5CAD0', muted: '8B9198', accent: '8CCBF4', accent2: '4A98D4', down: 'EAA39B' };
+  const F = 'Segoe UI';
+  const pptx = new PptxGenJS();
+  pptx.layout = 'LAYOUT_WIDE'; // 13,33 x 7,5 pol
+  pptx.author = 'Revenue · Grupo JCA'; pptx.company = 'Grupo JCA'; pptx.title = `Radar de Demanda · ${periodName()}`;
+  const logo = await sunPng();
+  pptx.defineSlideMaster({ title: 'HELIOS', background: { color: C.bg },
+    objects: [
+      { image: { data: logo, x: 0.5, y: 0.32, w: 0.34, h: 0.34 } },
+      { text: { text: 'HELIOS  ·  RADAR DE DEMANDA', options: { x: 0.92, y: 0.3, w: 6, h: 0.38, fontFace: F, fontSize: 10, bold: true, color: C.ink2, charSpacing: 4 } } },
+      { line: { x: 0.5, y: 7.0, w: 12.33, h: 0, line: { color: C.line, width: 0.75 } } },
+      { text: { text: `Revenue · Grupo JCA  ·  ${periodName()}`, options: { x: 0.5, y: 7.05, w: 9, h: 0.3, fontFace: F, fontSize: 9, color: C.muted } } },
+    ],
+    slideNumber: { x: 12.3, y: 7.05, w: 0.6, h: 0.3, fontFace: F, fontSize: 9, color: C.muted, align: 'right' } });
+  const title = (s, kicker, t, sub) => {
+    s.addText(kicker.toUpperCase(), { x: 0.5, y: 0.95, w: 12, h: 0.3, fontFace: F, fontSize: 10, color: C.accent, bold: true, charSpacing: 3 });
+    s.addText(t, { x: 0.5, y: 1.22, w: 12.3, h: 0.7, fontFace: F, fontSize: 28, bold: true, color: C.ink });
+    if (sub) s.addText(sub, { x: 0.5, y: 1.88, w: 12.3, h: 0.4, fontFace: F, fontSize: 13, color: C.muted });
+  };
+  const scope = cities.length === wxCityList().length || !XD.places.size ? 'Todas as praças' : cities.join(', ');
+
+  // capa
+  let s = pptx.addSlide();
+  s.background = { color: C.bg };
+  s.addShape(pptx.ShapeType.ellipse, { x: 7.6, y: -2.2, w: 8, h: 8, fill: { color: C.accent2, transparency: 88 }, line: { type: 'none' } });
+  s.addImage({ data: logo, x: 0.8, y: 1.2, w: 1.5, h: 1.5 });
+  s.addText('HELIOS', { x: 0.8, y: 2.9, w: 8, h: 0.4, fontFace: F, fontSize: 14, bold: true, color: C.ink2, charSpacing: 10 });
+  s.addText('Radar de Demanda', { x: 0.8, y: 3.35, w: 11, h: 1.1, fontFace: F, fontSize: 54, bold: true, color: C.ink });
+  s.addText(periodName(), { x: 0.8, y: 4.45, w: 11, h: 0.6, fontFace: F, fontSize: 24, color: C.accent });
+  s.addText(`${scope}  ·  ${plural(evs.length, 'evento', 'eventos')}  ·  gerado em ${label(TODAY)}`, { x: 0.8, y: 5.1, w: 11, h: 0.4, fontFace: F, fontSize: 13, color: C.muted });
+  s.addText('Revenue · Grupo JCA', { x: 0.8, y: 6.7, w: 6, h: 0.3, fontFace: F, fontSize: 10, color: C.muted });
+
+  // resumo
+  if (what.has('resumo')) {
+    s = pptx.addSlide({ masterName: 'HELIOS' });
+    title(s, 'Resumo', `${plural(evs.length, 'evento', 'eventos')} no período`, `${scope} · pressão de demanda de 0 a 100 (75+ = alta)`);
+    const hi = evs.filter((e) => e.i >= HI);
+    const peaks = windows().filter((w) => w.to >= a && w.from <= b);
+    const byP = {}; evs.filter((e) => e.p !== 'Nacional' && e.p !== 'Multi').forEach((e) => { byP[e.p] = (byP[e.p] || 0) + e.i; });
+    const topP = Object.entries(byP).sort((x, y) => y[1] - x[1])[0];
+    const kp = [[String(evs.length), 'eventos no período'], [String(hi.length), 'com pressão alta'], [peaks[0] ? short(peaks[0].from) : '—', 'próximo pico'], [topP ? topP[0] : '—', 'praça em alta']];
+    kp.forEach(([v, l], i) => {
+      const x = 0.5 + i * 3.1;
+      s.addShape(pptx.ShapeType.roundRect, { x, y: 2.55, w: 2.9, h: 1.55, fill: { color: C.panel }, line: { color: C.line, width: 0.75 }, rectRadius: 0.12 });
+      s.addText(v, { x: x + 0.2, y: 2.7, w: 2.6, h: 0.8, fontFace: F, fontSize: v.length > 9 ? 22 : 32, bold: true, color: i === 1 ? C.accent : C.ink });
+      s.addText(l, { x: x + 0.2, y: 3.5, w: 2.6, h: 0.4, fontFace: F, fontSize: 12, color: C.muted });
+    });
+    s.addText('Os mais fortes', { x: 0.5, y: 4.4, w: 6, h: 0.4, fontFace: F, fontSize: 14, bold: true, color: C.ink });
+    const top = evs.slice().sort((x, y) => y.i - x.i).slice(0, 5);
+    s.addText(top.map((e) => ({ text: `${e.n}  —  ${range(e)} · ${place(e)} · ${e.i}`, options: { bullet: { code: '25CF' }, color: e.i >= HI ? C.accent : C.ink2, breakLine: true } })), { x: 0.5, y: 4.8, w: 12.3, h: 2, fontFace: F, fontSize: 13, paraSpaceAfter: 6, valign: 'top' });
+  }
+
+  // pressão
+  if (what.has('pressao')) {
+    const days = []; for (let d = a, n = 0; d <= b && n < 120; d = addDays(d, 1), n++) days.push(d);
+    const idx = new Map();
+    EV().filter(xdPlaceOk).forEach((e) => { for (let d = e.d, n = 0; d <= end(e) && n < 400; d = addDays(d, 1), n++) idx.set(d, Math.max(idx.get(d) || 0, e.i)); });
+    s = pptx.addSlide({ masterName: 'HELIOS' });
+    title(s, 'Pressão de demanda', 'Dia a dia no período', 'Pico de pressão de cada dia (0 a 100). Acima de 75 = pressão alta.');
+    s.addChart(pptx.ChartType.line, [{ name: 'Pressão', labels: days.map((d) => short(d)), values: days.map((d) => idx.get(d) || 0) }], {
+      x: 0.5, y: 2.45, w: 12.3, h: 4.35, chartColors: [C.accent], lineSize: 2.5, lineDataSymbol: 'none', valAxisMaxVal: 100, valAxisMinVal: 0,
+      catAxisLabelColor: C.muted, valAxisLabelColor: C.muted, catAxisLabelFontSize: 9, valAxisLabelFontSize: 9, catAxisLabelFontFace: F, valAxisLabelFontFace: F,
+      valGridLine: { color: C.line, style: 'dash', size: 0.5 }, catGridLine: { style: 'none' }, catAxisLineShow: false, valAxisLineShow: false, showLegend: false, plotArea: { fill: { color: C.bg } } });
+  }
+
+  // janelas de pico
+  if (what.has('picos')) {
+    const ws = windows().filter((w) => w.to >= a && w.from <= b).slice(0, 8);
+    s = pptx.addSlide({ masterName: 'HELIOS' });
+    title(s, 'Janelas de pico', ws.length ? `${plural(ws.length, 'janela', 'janelas')} de pressão alta` : 'Sem janela de pico no período', 'Dias seguidos com pressão de demanda alta.');
+    ws.forEach((w, i) => {
+      const x = 0.5 + (i % 2) * 6.25, y = 2.5 + Math.floor(i / 2) * 1.1;
+      s.addText(w.from === w.to ? label(w.from) : `${short(w.from)} a ${label(w.to)}`, { x, y, w: 6, h: 0.3, fontFace: F, fontSize: 10, color: C.muted, charSpacing: 2 });
+      s.addText([...w.names].slice(0, 3).join(', '), { x, y: y + 0.28, w: 6, h: 0.4, fontFace: F, fontSize: 14, bold: true, color: C.ink });
+      s.addShape(pptx.ShapeType.roundRect, { x, y: y + 0.74, w: 5.9, h: 0.08, fill: { color: C.line }, line: { type: 'none' }, rectRadius: 0.04 });
+      s.addShape(pptx.ShapeType.roundRect, { x, y: y + 0.74, w: 5.9 * w.peak / 100, h: 0.08, fill: { color: C.accent }, line: { type: 'none' }, rectRadius: 0.04 });
+    });
+  }
+
+  // destaques com foto
+  if (what.has('destaques')) {
+    const top = evs.slice().sort((x, y) => y.i - x.i).slice(0, 8);
+    for (let p = 0; p < top.length; p += 4) {
+      s = pptx.addSlide({ masterName: 'HELIOS' });
+      title(s, 'Destaques', p ? 'Destaques (continuação)' : 'Os maiores eventos do período');
+      const part = top.slice(p, p + 4);
+      for (let i = 0; i < part.length; i++) {
+        const e = part[i], x = 0.5 + (i % 2) * 6.25, y = 2.15 + Math.floor(i / 2) * 2.4;
+        const ph = e.img ? await toDataURL(e.img.f) : null;
+        if (ph) s.addImage({ data: ph, x, y, w: 2.9, h: 2.1, sizing: { type: 'cover', w: 2.9, h: 2.1 }, rounding: false });
+        else s.addShape(pptx.ShapeType.rect, { x, y, w: 2.9, h: 2.1, fill: { color: C.panel }, line: { type: 'none' } });
+        s.addText(`${range(e)} · ${place(e)}`.toUpperCase(), { x: x + 3.1, y, w: 2.9, h: 0.5, fontFace: F, fontSize: 9, color: C.muted, charSpacing: 1, valign: 'top' });
+        s.addText(e.n, { x: x + 3.1, y: y + 0.45, w: 2.9, h: 0.9, fontFace: F, fontSize: 15, bold: true, color: C.ink, valign: 'top' });
+        s.addText(`Pressão ${e.i} · ${level(e.i)}`, { x: x + 3.1, y: y + 1.35, w: 2.9, h: 0.3, fontFace: F, fontSize: 11, color: e.i >= HI ? C.accent : C.ink2 });
+        if (e.s) s.addText(e.s.length > 150 ? `${e.s.slice(0, 147)}…` : e.s, { x: x + 3.1, y: y + 1.65, w: 2.9, h: 0.6, fontFace: F, fontSize: 9, color: C.muted, valign: 'top' });
+      }
+    }
+  }
+
+  // agenda (tabela)
+  if (what.has('agenda') && evs.length) {
+    const head = ['Data', 'Evento', 'Praça', 'Tipo', 'Pressão', 'Tempo'].map((t) => ({ text: t, options: { bold: true, color: C.muted, fontSize: 10, fill: { color: C.bg } } }));
+    const per = 11;
+    for (let p = 0; p < evs.length; p += per) {
+      s = pptx.addSlide({ masterName: 'HELIOS' });
+      title(s, 'Agenda', `Eventos do período${evs.length > per ? ` · ${Math.floor(p / per) + 1} de ${Math.ceil(evs.length / per)}` : ''}`);
+      const rows = evs.slice(p, p + per).map((e) => {
+        const c = evCity(e), d = onDay(e, TODAY) ? TODAY : e.d, r = wxGet(c, d);
+        const wx = r && (d < TODAY || inForecast(d)) ? `${tC(r.hi)}${rainy(r) ? ` · ${mmF(r.mm)}` : ''}` : '';
+        return [range(e), e.n, place(e), catName(e.c), String(e.i), wx].map((t, j) => ({ text: t, options: { color: j === 4 && e.i >= HI ? C.accent : j === 1 ? C.ink : C.ink2, bold: j === 1 || (j === 4 && e.i >= HI) } }));
+      });
+      s.addTable([head, ...rows], { x: 0.5, y: 2.1, w: 12.3, colW: [2.2, 5.0, 1.9, 1.2, 0.9, 1.1], fontFace: F, fontSize: 10.5, color: C.ink2, fill: { color: C.bg }, border: { type: 'solid', pt: 0.5, color: C.line }, rowH: 0.38, valign: 'middle', margin: [0.04, 0.08, 0.04, 0.08] });
+    }
+  }
+
+  // calendário (um mês por slide)
+  if (what.has('calendario')) {
+    for (const mk of monthsBetween(a, b)) {
+      const [y, m] = mk.split('-').map(Number), lead = new Date(y, m - 1, 1, 12).getDay(), nd = Number(monthEnd(mk).slice(8));
+      s = pptx.addSlide({ masterName: 'HELIOS' });
+      title(s, 'Calendário', `${cap(MONL[m - 1])} de ${y}`, scope);
+      const cells = Array(lead).fill(null).concat(Array.from({ length: nd }, (_, i) => `${mk}-${String(i + 1).padStart(2, '0')}`));
+      while (cells.length % 7) cells.push(null);
+      const head = WEEK.map((w) => ({ text: w.toUpperCase(), options: { bold: true, color: C.muted, fontSize: 9, align: 'center' } }));
+      const rows = [];
+      for (let r = 0; r < cells.length; r += 7) rows.push(cells.slice(r, r + 7).map((d) => {
+        if (!d) return { text: '' };
+        const list = EV().filter((e) => xdPlaceOk(e) && onDay(e, d)).sort((x, z) => z.i - x.i);
+        const top = list[0];
+        return { text: [{ text: `${Number(d.slice(8))}`, options: { bold: true, color: d === TODAY ? C.accent : C.ink, fontSize: 11, breakLine: true } },
+          { text: top ? `${top.n.length > 34 ? `${top.n.slice(0, 33)}…` : top.n}${list.length > 1 ? ` +${list.length - 1}` : ''}` : '', options: { color: top && top.i >= HI ? C.accent : C.ink2, fontSize: 8 } }],
+          options: { valign: 'top', fill: { color: d < a || d > b ? C.bg : C.panel } } };
+      }));
+      s.addTable([head, ...rows], { x: 0.5, y: 2.4, w: 12.3, colW: Array(7).fill(12.3 / 7), fontFace: F, border: { type: 'solid', pt: 0.5, color: C.line }, rowH: [0.3, ...rows.map(() => (rows.length > 5 ? 0.68 : 0.8))], margin: [0.05, 0.07, 0.05, 0.07] });
+    }
+  }
+
+  // previsão por praça
+  if (what.has('previsao')) {
+    const days = Array.from({ length: WX_DAYS }, (_, k) => addDays(TODAY, k));
+    for (const c of cities) {
+      const recs = days.map((d) => wxGet(c, d));
+      if (!recs.some(Boolean)) continue;
+      const w = wxSummary(c);
+      s = pptx.addSlide({ masterName: 'HELIOS' });
+      title(s, 'Previsão do tempo', c, w.ok ? `${plural(w.rain, 'dia', 'dias')} de chuva nos próximos 14 dias · ${w.text}` : '');
+      const head = [{ text: '', options: {} }, ...days.map((d) => ({ text: `${WEEK[asDate(d).getDay()]} ${asDate(d).getDate()}`, options: { bold: true, color: d === TODAY ? C.accent : C.muted, fontSize: 9, align: 'center' } }))];
+      const row = (lbl, f) => [{ text: lbl, options: { color: C.muted, fontSize: 9, bold: true } }, ...recs.map((r, i) => ({ text: r ? f(r) : '—', options: { align: 'center', fontSize: 10, color: days[i] === TODAY ? C.accent : C.ink2 } }))];
+      s.addTable([head, row('Tempo', (r) => wxWord(r).replace('Predomínio de ', '').replace('Parcialmente ', 'Parc. ')), row('Máxima', (r) => tC(r.hi)), row('Mínima', (r) => tC(r.lo)), row('Chuva', (r) => (rainy(r) ? mmF(r.mm) : '—')), row('Chance', (r) => (r.pp != null ? `${r.pp}%` : '—'))],
+        { x: 0.5, y: 2.45, w: 12.3, colW: [0.9, ...Array(14).fill(11.4 / 14)], fontFace: F, border: { type: 'solid', pt: 0.5, color: C.line }, rowH: 0.34, fill: { color: C.bg }, margin: [0.03, 0.03, 0.03, 0.03] });
+      s.addChart([{ type: pptx.ChartType.bar, data: [{ name: 'Chuva (mm)', labels: days.map((d) => short(d)), values: recs.map((r) => (r && r.mm) || 0) }], options: { chartColors: [C.accent2], barGapWidthPct: 160, secondaryValAxis: true, secondaryCatAxis: true } },
+        { type: pptx.ChartType.line, data: [{ name: 'Máxima', labels: days.map((d) => short(d)), values: recs.map((r) => (r ? Math.round(r.hi) : 0)) }, { name: 'Mínima', labels: days.map((d) => short(d)), values: recs.map((r) => (r && r.lo != null ? Math.round(r.lo) : 0)) }], options: { chartColors: [C.accent, C.muted], lineSize: 2, lineDataSymbol: 'circle', lineDataSymbolSize: 5 } }],
+        { x: 0.5, y: 4.65, w: 12.3, h: 2.25, valAxes: [{ showValAxisTitle: false, valAxisLabelColor: C.muted, valGridLine: { color: C.line, style: 'dash', size: 0.5 } }, { showValAxisTitle: false, valAxisLabelColor: C.muted, valGridLine: { style: 'none' } }],
+          catAxes: [{ catAxisLabelColor: C.muted, catAxisLabelFontSize: 8 }, { catAxisHidden: true }], showLegend: true, legendPos: 'b', legendColor: C.muted, legendFontSize: 9 });
+    }
+  }
+
+  // feriados: tempo de todas as praças
+  if (what.has('feriados')) {
+    const hols = evs.filter(isNationalHoliday);
+    for (const e of hols) {
+      const days = wxDays(e).slice(0, 5), fut = days[0] > addDays(TODAY, WX_DAYS - 1), src = (d) => (fut ? lastYear(d) : d);
+      if (fut) await ensureHist(wxCityList(), lastYear(days[0]), lastYear(days[days.length - 1]));
+      s = pptx.addSlide({ masterName: 'HELIOS' });
+      title(s, 'Feriado', e.n, `${range(e)} · ${fut ? 'previsão ainda não aberta: abaixo, os mesmos dias do ano passado' : 'tempo em todas as praças'}`);
+      const head = [{ text: 'Praça', options: { bold: true, color: C.muted, fontSize: 10 } }, ...days.map((d) => ({ text: label(d), options: { bold: true, color: C.muted, fontSize: 10, align: 'center' } }))];
+      const rows = wxCityList().map((c) => [{ text: c, options: { color: C.ink, bold: true } }, ...days.map((d) => { const r = wxGet(c, src(d)); return { text: r ? `${tC(r.hi)} / ${tC(r.lo)}${rainy(r) ? `  ·  ${mmF(r.mm)}` : ''}` : '—', options: { align: 'center', color: r && rainy(r) ? C.accent : C.ink2 } }; })]);
+      s.addTable([head, ...rows], { x: 0.5, y: 2.45, w: 12.3, colW: [2.3, ...Array(days.length).fill(10 / days.length)], fontFace: F, fontSize: 11, border: { type: 'solid', pt: 0.5, color: C.line }, rowH: 0.38, fill: { color: C.bg }, margin: [0.04, 0.08, 0.04, 0.08] });
+    }
+  }
+
+  // fontes
+  s = pptx.addSlide({ masterName: 'HELIOS' });
+  title(s, 'Fontes', 'De onde vêm os dados');
+  s.addText([
+    { text: 'Eventos: organizadores, bilheterias, prefeituras, federações e imprensa. Datas e locais podem mudar.', options: { bullet: true, breakLine: true } },
+    { text: 'Pressão de demanda (0 a 100): comparativa entre eventos, não é previsão de vendas.', options: { bullet: true, breakLine: true } },
+    { text: 'Tempo: Open-Meteo (previsão de 14 dias e registro histórico ERA5).', options: { bullet: true, breakLine: true } },
+    { text: `Dados de ${DATA.atualizado ? short(DATA.atualizado) : '—'} · gerado em ${label(TODAY)} pelo Hélios · Radar de Demanda.`, options: { bullet: true } },
+  ], { x: 0.5, y: 2.3, w: 12.3, h: 3, fontFace: F, fontSize: 14, color: C.ink2, paraSpaceAfter: 10, valign: 'top' });
+
+  const name = `radar-demanda-${periodName().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/gi, '-').toLowerCase().replace(/^-|-$/g, '')}.pptx`;
+  await pptx.writeFile({ fileName: name });
+  toast('PowerPoint baixado. Dá para editar tudo.');
+}
+
 /* ---------- PNG para o grupo ---------- */
 let sunURI = '';
 function sunDataURI() {
@@ -1874,11 +2161,11 @@ function sunDataURI() {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><defs><linearGradient id="g" x1="20" y1="10" x2="180" y2="190" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#e8f6ff"/><stop offset=".45" stop-color="#8ccbf4"/><stop offset=".75" stop-color="#4a98d4"/><stop offset="1" stop-color="#bfe5ff"/></linearGradient></defs><path d="${d}" fill="none" stroke="url(#g)" stroke-width="2.6" stroke-linecap="round"/><circle cx="100" cy="100" r="30" fill="none" stroke="url(#g)" stroke-width="3.2"/><circle cx="100" cy="100" r="9" fill="url(#g)"/></svg>`;
   return (sunURI = `data:image/svg+xml,${encodeURIComponent(svg)}`);
 }
-async function exportPng(list, one) {
+async function exportPng(list, one, periodLabel) {
   if (!window.html2canvas) { toast('Aguarde um instante e tente de novo.'); return; }
   const evs = list || EV().filter((e) => (st.mode === 'cal' && st.calDay ? onDay(e, st.calDay) : inWindow(e)) && ok(e)).sort((a, b) => a.d.localeCompare(b.d) || b.i - a.i).slice(0, 12);
   if (!evs.length) { toast('Nada para exportar com estes filtros.'); return; }
-  const period = one ? range(evs[0]) : st.mode === 'cal' && st.calDay ? label(st.calDay) : whenText();
+  const period = one ? range(evs[0]) : periodLabel || (st.mode === 'cal' && st.calDay ? label(st.calDay) : whenText());
   const e0 = evs[0], dt = asDate(TODAY);
   const wxCell = (e) => { const c = evCity(e), d = onDay(e, TODAY) ? TODAY : e.d, r = wxGet(c, d); return r && (d < TODAY || inForecast(d)) ? `${tC(r.hi)}${rainy(r) ? ` · <em>${mmF(r.mm)}</em>` : ''}` : ''; };
   $('exp').className = `exp${one ? ' one' : ''}`;
@@ -1972,7 +2259,7 @@ $('calNext').addEventListener('click', () => { const [y, m] = st.month.split('-'
 $('calToday').addEventListener('click', () => { st.month = TODAY.slice(0, 7); st.calDay = TODAY; renderCal(); });
 $('cal').addEventListener('click', (e) => { const b = e.target.closest('.cell-d'); if (!b) return; st.calDay = b.dataset.d; renderCal(); setTimeout(() => $('calDay').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'nearest' }), 60); });
 $('past').addEventListener('click', () => { st.past = !st.past; renderList(); paintReceipt(); });
-$('exportBtn').addEventListener('click', () => exportPng());
+$('exportBtn').addEventListener('click', openExport);
 $('helpBtn').addEventListener('click', openHelp);
 $('live').addEventListener('click', () => loadForecast());
 $('themeBtn').addEventListener('click', () => {
