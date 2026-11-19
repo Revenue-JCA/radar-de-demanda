@@ -5,4 +5,4 @@ Shows, festivais, feriados, provas e jogos que movimentam viagens, com o tempo d
 - Eventos: `data/eventos.json` (d, d2, n, p, c, i, s, img, fonte). Fotos em `img/` (160×160 em `t/`, grandes em `f/`).
 - O HELIOS lê `data/eventos.json` e abre esta página na aba Demanda (`?embed=1&tema=escuro|claro&dia=AAAA-MM-DD&praca=Cidade`).
 - Tempo: Open-Meteo (previsão de 14 dias, atualizada a cada 30 min, e registro histórico).
-- Vendas: o Excel do Cubo é lido no navegador e fica só no computador de quem carregou. Este site não tem números de venda.
+- Abas: Visão geral, Demanda (calendário e destaques), Previsão (uma praça por vez) e Agenda.

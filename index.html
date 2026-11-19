@@ -125,6 +125,23 @@ html.embed #themeBtn { display: none; }
 .live-st b { color: var(--white); font-weight: 500; }
 @keyframes pulse { 50% { opacity: .35; } }
 
+/* abas, como no HELIOS */
+.tabs-main { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 20px; margin-top: 22px; }
+.seg-lg { padding: 3px; }
+.seg-lg button { padding: 9px 20px; font-size: 13px; font-weight: 500; }
+.updated { color: var(--faint); font-size: 11.5px; letter-spacing: .02em; }
+.wx-cities { display: flex; flex-wrap: wrap; gap: 6px; }
+#wxGrid { grid-template-columns: repeat(var(--n), minmax(50px, 1fr)); min-width: calc(var(--n) * 52px); }
+#wxGrid .corner, #wxGrid .city { display: none; }
+#wxGrid .cell { min-height: 104px; }
+/* preto e branco fora de hoje: a cor aparece ao passar o mouse */
+.wxg .hd:not(.today), .wxg .cell:not(.today) { filter: grayscale(1); opacity: .62; transition: filter .35s var(--ease), opacity .35s var(--ease); }
+.wxg .cell:not(.today):hover { filter: none; opacity: 1; }
+.wxg .cell.today { opacity: 1; }
+.cell-d:not(.today) { filter: grayscale(1); opacity: .7; transition: filter .35s var(--ease), opacity .35s var(--ease), background .3s; }
+.cell-d:not(.today):hover, .cell-d.sel { filter: none; opacity: 1; }
+.cell-d.out:not(:hover) { opacity: .28; }
+
 /* recibo dos filtros */
 .filter-receipt { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 18px; margin-block: 18px 0; }
 .rc { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; padding: 2px 0 2px 14px; border: 0; border-left: 2px solid var(--accent); background: none; color: var(--muted); font-size: 12.5px; text-align: left; }
@@ -338,114 +355,6 @@ html.embed .mod-head { top: 16px; }
 .wx-chart-h h3 { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; }
 .wx-chart-h .legend { margin: 0; }
 
-/* vendas × tempo × eventos */
-:root { --down: #eaa39b; --down-soft: rgba(234, 163, 155, .14); }
-:root[data-mode="light"] { --down: #b04f47; --down-soft: rgba(176, 79, 71, .1); }
-.sx-drop { display: grid; justify-items: center; gap: 10px; padding: 44px 24px; border: 1px dashed var(--line-strong); border-radius: 28px; color: var(--muted); text-align: center; cursor: pointer; transition: border-color .3s var(--ease), background .3s var(--ease), color .3s; }
-.sx-drop:hover, .sx-drop.over { border-color: var(--accent); background: var(--accent-soft); color: var(--white); }
-.sx-drop svg { width: 30px; height: 30px; fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.sx-drop b { color: var(--white); font-size: 15px; font-weight: 600; }
-.sx-drop small { max-width: 56ch; font-size: 12.5px; line-height: 1.55; }
-.sx-drop.busy { pointer-events: none; opacity: .7; }
-.sx-file { margin: 0; color: var(--faint); font-size: 11.5px; line-height: 1.6; }
-.sx-file b { color: var(--muted); font-weight: 500; }
-.sx-file button { padding: 0; border: 0; background: none; color: var(--muted); font-size: 11.5px; text-decoration: underline; text-underline-offset: 3px; }
-.sx-file button:hover { color: var(--white); }
-#sxMain { display: grid; gap: 18px; min-width: 0; }
-.sx-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.sx-find { display: inline-flex; align-items: center; gap: 8px; min-height: 34px; padding: 0 14px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--muted); transition: border-color .2s; }
-.sx-find:focus-within { border-color: var(--white); }
-.sx-find input { width: 170px; max-width: 40vw; border: 0; outline: 0; background: transparent; font-size: 12.5px; color: var(--white); }
-select.sel { appearance: none; min-height: 34px; padding: 0 34px 0 14px; border: 1px solid var(--line-strong); border-radius: 999px; background: transparent; color: var(--white); font-size: 12.5px; cursor: pointer;
-  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 17px) 52%, calc(100% - 12px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
-select.sel option { background: var(--panel); color: var(--white); }
-.hm-scroll { overflow-x: auto; margin-inline: -6px; padding: 0 6px 6px; scrollbar-width: thin; }
-.hm { display: grid; grid-template-columns: minmax(180px, 250px) repeat(var(--n), minmax(56px, 1fr)); min-width: calc(250px + var(--n) * 58px); }
-.hm .corner { align-self: end; padding: 0 0 10px; color: var(--faint); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
-.hm .mh { display: grid; justify-items: center; align-content: end; gap: 1px; padding: 0 2px 10px; border: 0; background: none; color: var(--faint); font-size: 10px; letter-spacing: .06em; transition: color .2s; }
-.hm .mh b { color: var(--muted); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
-.hm .mh:hover b, .hm .mh.on b { color: var(--accent); }
-.hm .mh.on::after { content: ""; width: 5px; height: 5px; margin-top: 4px; border-radius: 50%; background: var(--accent); }
-.hm .rn { display: grid; align-content: center; gap: 1px; min-width: 0; min-height: 48px; padding: 0 12px 0 0; border: 0; border-top: 1px solid var(--line); background: none; color: var(--ink-2); text-align: left; transition: color .2s; }
-.hm .rn strong { font-size: 12.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.hm .rn small { color: var(--faint); font-size: 10.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.hm .rn:hover, .hm .rn.on { color: var(--white); }
-.hm .rn.on strong { color: var(--accent); }
-.hm .hc { position: relative; isolation: isolate; display: grid; place-items: center; min-height: 48px; padding: 0; border: 0; border-top: 1px solid var(--line); background: none; color: var(--muted); font-size: 11.5px; font-weight: 600; }
-.hm .hc::before { content: ""; position: absolute; inset: 7px 3px; z-index: -1; border-radius: 999px; background: var(--c, transparent); transition: transform .35s var(--ease), box-shadow .3s; }
-.hm .hc.dn { --c: color-mix(in srgb, var(--down) calc(12% + var(--a) * 46%), transparent); color: var(--white); }
-.hm .hc.up { --c: color-mix(in srgb, var(--accent) calc(10% + var(--a) * 42%), transparent); color: var(--white); }
-.hm .hc.eq { --c: color-mix(in srgb, var(--white) 5%, transparent); }
-.hm .hc.na { color: var(--faint); font-weight: 400; }
-.hm .hc:hover::before { transform: scale(1.07); }
-.hm .hc.sel::before { box-shadow: 0 0 0 1.5px var(--white); }
-.hm .hc.col::after { content: ""; position: absolute; inset: 0 1px; z-index: -2; background: color-mix(in srgb, var(--accent) 4%, transparent); }
-.hm .hc.part span::after { content: "*"; }
-.hm .hc .drop { position: absolute; top: 4px; left: 5px; width: 11px; height: 11px; }
-.hm .hc .ef { position: absolute; top: 6px; right: 7px; width: 5px; height: 5px; border-radius: 50%; background: var(--muted); }
-.hm .hc .ef.hi { background: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
-.drop { flex: none; width: 11px; height: 11px; fill: var(--accent); }
-.sx-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-top: 8px; color: var(--muted); font-size: 11.5px; }
-.sx-legend span { display: inline-flex; align-items: center; gap: 7px; }
-.sx-legend i { width: 18px; height: 10px; border-radius: 999px; }
-.sx-legend .lg-dn { background: color-mix(in srgb, var(--down) 50%, transparent); }
-.sx-legend .lg-eq { background: color-mix(in srgb, var(--white) 6%, transparent); }
-.sx-legend .lg-up { background: color-mix(in srgb, var(--accent) 48%, transparent); }
-.sx-legend .lg-ev { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-.sx-legend .drop { width: 11px; height: 11px; }
-.sx-detail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); gap: 22px clamp(20px, 3vw, 48px); padding-top: 20px; border-top: 1px solid var(--line); animation: rise .45s var(--ease) both; }
-.sx-detail h3 { margin: 6px 0 0; font-size: 20px; font-weight: 600; line-height: 1.2; letter-spacing: -.025em; }
-.sx-verdict { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 5px 13px; border-radius: 999px; background: color-mix(in srgb, var(--white) 6%, transparent); color: var(--ink-2); font-size: 12px; font-weight: 600; }
-.sx-verdict.dn { background: var(--down-soft); color: var(--down); }
-.sx-verdict.up { background: var(--accent-soft); color: var(--accent); }
-.sx-nums { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
-.sx-nums > div { display: grid; place-content: center; justify-items: center; gap: 3px; width: 112px; height: 112px; padding: 8px; border: 1px solid var(--line-strong); border-radius: 50%; text-align: center; }
-.sx-nums b { font-size: 17px; font-weight: 600; line-height: 1.05; letter-spacing: -.03em; }
-.sx-nums span { color: var(--muted); font-size: 9.5px; letter-spacing: .1em; line-height: 1.25; text-transform: uppercase; }
-.sx-nums > div.dn { border-color: color-mix(in srgb, var(--down) 70%, transparent); background: var(--down-soft); }
-.sx-nums > div.dn b { color: var(--down); }
-.sx-nums > div.up { border-color: var(--accent-line); background: var(--accent-soft); }
-.sx-nums > div.up b { color: var(--accent); }
-.sx-why { display: grid; gap: 10px; margin: 18px 0 0; padding: 0; list-style: none; }
-.sx-why li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; color: var(--ink-2); font-size: 13px; line-height: 1.55; }
-.sx-why li > svg { width: 18px; height: 18px; margin-top: 1px; fill: none; stroke: var(--muted); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.sx-why li.on > svg { stroke: var(--accent); }
-.sx-why li b { color: var(--white); font-weight: 600; }
-.sx-why li.read { margin-top: 4px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--white); font-weight: 500; }
-.sx-why .evl { display: block; color: var(--muted); font-size: 12px; }
-.mcal-h { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
-.mcal-h b { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; transition: color .2s; }
-.mcal-h .pill { padding: 2px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; background: color-mix(in srgb, var(--white) 6%, transparent); color: var(--ink-2); }
-.mcal-h .pill.dn { background: var(--down-soft); color: var(--down); }
-.mcal-h .pill.up { background: var(--accent-soft); color: var(--accent); }
-.mcal-g { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
-.mcal-g .w { color: var(--faint); font-size: 9.5px; font-weight: 600; letter-spacing: .1em; text-align: center; text-transform: uppercase; }
-.mcal-g .d { position: relative; display: grid; place-items: center; aspect-ratio: 1; border-radius: 50%; color: var(--ink-2); font-size: 11px; background: color-mix(in srgb, var(--accent) calc(var(--r) * 62%), transparent); box-shadow: inset 0 0 0 1px var(--line); }
-.mcal-g .d.hv { box-shadow: inset 0 0 0 1.5px var(--accent); color: var(--white); font-weight: 600; }
-.mcal-g .d.hol { color: var(--white); font-weight: 700; }
-.mcal-g .d.hol::before { content: ""; position: absolute; top: 2px; left: 50%; width: 10px; height: 1.5px; margin-left: -5px; border-radius: 999px; background: var(--white); opacity: .7; }
-.mcal-g .d.fut { opacity: .35; }
-.mcal-g .d i { position: absolute; bottom: 2px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--muted); }
-.mcal-g .d i.hi { background: var(--white); box-shadow: 0 0 0 1.5px var(--accent); }
-.mcal-k { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; color: var(--faint); font-size: 10.5px; }
-.mcal-k span { display: inline-flex; align-items: center; gap: 6px; }
-.mcal-k i { width: 10px; height: 10px; border-radius: 50%; }
-.ycal-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
-.ycal { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 22px 28px; margin-top: 4px; }
-.ycal .mcal { padding: 14px 0 0; border: 0; border-top: 1px solid var(--line); background: none; color: inherit; text-align: left; cursor: pointer; }
-.ycal .mcal:hover .mcal-h b, .ycal .mcal.on .mcal-h b { color: var(--accent); }
-.sx-mini { display: grid; gap: 4px; padding-top: 4px; }
-.sx-mini .r { display: grid; grid-template-columns: minmax(110px, 1.1fr) minmax(60px, 1fr) 52px 34px; gap: 14px; align-items: center; padding: 7px 14px; border-radius: 999px; font-size: 12.5px; transition: background .25s; }
-.sx-mini .r:hover { background: var(--down-soft); }
-.sx-mini .r span { color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.sx-mini .r i { display: block; height: 8px; border-radius: 999px; background: color-mix(in srgb, var(--white) 8%, transparent); overflow: hidden; }
-.sx-mini .r i::after { content: ""; display: block; width: var(--w); height: 100%; border-radius: 999px; background: var(--down); transform-origin: left; animation: grow .9s var(--ease) both; }
-.sx-mini .r b { color: var(--down); font-weight: 600; text-align: right; }
-.sx-mini .r em { display: inline-flex; gap: 4px; align-items: center; font-style: normal; }
-.sx-mini .r em .ef { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
-.theater-visual .sx-mini .r { font-size: 16px; padding-block: 10px; }
-@media (max-width: 1020px) { .sx-detail { grid-template-columns: minmax(0, 1fr); } }
-
 /* 60 dias */
 .strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(4px, 1fr); align-items: end; gap: 4px; height: 70px; }
 .strip button { position: relative; height: calc(4px + var(--h) * 64px); padding: 0; border: 0; border-radius: 999px; background: color-mix(in srgb, var(--white) var(--a), transparent); transform-origin: bottom; animation: grow-y .8s var(--ease) both; animation-delay: calc(var(--k) * 8ms); transition: opacity .2s; }
@@ -485,7 +394,7 @@ select.sel option { background: var(--panel); color: var(--white); }
 .cal-h h3 { margin: 0 auto 0 0; font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
 .cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
 .cal .wd { padding: 0 0 8px; color: var(--muted); font-size: 10.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; text-align: center; }
-.cell-d { position: relative; display: grid; align-content: start; gap: 8px; min-width: 0; min-height: 118px; padding: 10px 8px 14px; border: 0; border-top: 1px solid var(--line); background: none; color: inherit; text-align: left; overflow: hidden; transition: background .3s var(--ease); }
+.cell-d { position: relative; display: grid; align-content: start; gap: 8px; min-width: 0; min-height: 104px; padding: 10px 8px 14px; border: 0; border-top: 1px solid var(--line); background: none; color: inherit; text-align: left; overflow: hidden; transition: background .3s var(--ease); }
 .cell-d:hover { background: color-mix(in srgb, var(--white) 3.5%, transparent); }
 .cell-d.out { opacity: .38; }
 .cell-d .top-row { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
@@ -496,7 +405,8 @@ select.sel option { background: var(--panel); color: var(--white); }
 .cell-d .wxm .wi { width: 14px; height: 14px; }
 .cell-d .faces { display: flex; }
 .cell-d .faces img, .cell-d .faces span { display: grid; place-items: center; width: 24px; height: 24px; margin-right: -7px; border-radius: 50%; object-fit: cover; background: var(--panel-2); box-shadow: 0 0 0 2px var(--page); color: var(--muted); font-size: 9px; }
-.cell-d .nm { color: var(--ink-2); font-size: 11px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cell-d .nm .more { color: var(--muted); font-weight: 600; }
+.cell-d .nm { color: var(--ink-2); font-size: 11.5px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .cell-d .lv { position: absolute; left: 10px; right: 10px; bottom: 7px; height: 3px; border-radius: 999px; background: color-mix(in srgb, var(--white) var(--a), transparent); }
 .cell-d .lv.hi { background: var(--accent); }
 #calDay .day { margin-top: 4px; }
@@ -694,7 +604,6 @@ html[data-motion="filter"] #spotSec { view-transition-name: radar-spot; }
 html[data-motion="filter"] #lookSec { view-transition-name: radar-look; }
 html[data-motion="filter"] #wxSec { view-transition-name: radar-wx; }
 html[data-motion="filter"] #stripSec { view-transition-name: radar-strip; }
-html[data-motion="filter"] #salesSec { view-transition-name: radar-sales; }
 html[data-motion="filter"] #agendaSec { view-transition-name: radar-agenda; }
 html[data-motion="filter"] #receipt { view-transition-name: radar-receipt; }
 html[data-motion="theme"] { view-transition-name: root; }
@@ -776,16 +685,18 @@ html[data-motion="theme"] { view-transition-name: root; }
 <header class="wrap top" id="top">
   <span class="brand" aria-label="Hélios · Radar de Demanda"><svg class="brand-sun" viewBox="0 0 200 200" aria-hidden="true"><use href="#helios-sun"/></svg><span class="brand-word">Helios<small>Demanda</small></span></span>
   <div class="acts">
-    <button type="button" class="live-st busy" id="live"><i></i><span id="liveText">Lendo a previsão</span></button>
+    <button type="button" class="live-st busy" id="live" hidden><i></i><span id="liveText">Lendo a previsão</span></button>
     <button type="button" class="btn" id="exportBtn" title="Baixar uma imagem para mandar no grupo"><svg class="ico" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span class="lbl">Exportar</span></button>
     <button type="button" class="btn" id="themeBtn">Tema</button>
     <button type="button" class="btn round" id="helpBtn" title="Como ler o radar, de onde vêm os dados">?</button>
   </div>
 </header>
 
-<div class="wrap filter-receipt" id="receipt" role="status" aria-atomic="true"></div>
+<nav class="wrap tabs-main" id="tabs" aria-label="Seções"><div class="seg seg-lg" role="tablist"><button type="button" data-tab="geral">Visão geral</button><button type="button" data-tab="demanda">Demanda</button><button type="button" data-tab="previsao">Previsão</button><button type="button" data-tab="agenda">Agenda</button></div><span class="updated" id="updated"></span></nav>
 
-<section class="wrap sentinel-board plot-open" id="sentinel" aria-label="Sentinela">
+<div class="wrap filter-receipt" id="receipt" data-tab="demanda agenda" role="status" aria-atomic="true"></div>
+
+<section class="wrap sentinel-board plot-open" id="sentinel" data-tab="geral" aria-label="Sentinela">
   <div class="sentinel-copy" id="sentinelCopy">
     <div class="sentinel-kicker"><i aria-hidden="true"></i><span id="sentinelScope"></span></div>
     <div class="sentinel-frame" id="sentinelFrame"></div>
@@ -812,29 +723,12 @@ html[data-motion="theme"] { view-transition-name: root; }
   </nav>
 </dialog>
 
-<section class="wrap kpis" id="kpis" aria-label="Números do momento"></section>
+<section class="wrap kpis" id="kpis" data-tab="geral" aria-label="Números do momento"></section>
 
 <main>
-  <section class="wrap mod" id="spotSec">
-    <div class="mod-head"><h2>Em destaque</h2><p>Maior pressão de demanda nas próximas seis semanas, com o tempo previsto quando a data já está no alcance da previsão.</p></div>
-    <div class="mod-body"><div class="spot" id="spot"></div></div>
-  </section>
-
-  <section class="wrap mod" id="lookSec">
-    <div class="mod-head"><h2>Para onde olhar</h2><p id="radarSub"></p>
-      <div class="ctl"><div class="seg" id="radarBy" role="group" aria-label="Agrupar por"><button type="button" data-v="tipo">Tipo</button><button type="button" data-v="praca">Praça</button></div>
-      <div class="seg" id="radarMetric" role="group" aria-label="Medida"><button type="button" data-v="n">Eventos</button><button type="button" data-v="i">Pressão</button></div></div>
-    </div>
-    <div class="mod-body">
-      <p class="insight" id="lookInsight"></p>
-      <div class="look"><div id="radar"></div><div class="shares" id="shares"></div></div>
-      <div class="lg2"><span><i></i>Próximos 90 dias</span><span><i class="d"></i>Agenda inteira</span><span>Clique num eixo para filtrar</span></div>
-    </div>
-  </section>
-
-  <section class="wrap mod" id="wxSec">
-    <div class="mod-head"><h2>Tempo nas praças</h2><p>Previsão de 14 dias da Open-Meteo, atualizada sozinha a cada 30 minutos. Para os dias que já passaram, o registro histórico do tempo.</p>
-      <div class="ctl"><div class="seg" id="wxView" role="group" aria-label="Período do tempo"><button type="button" data-v="prox">Próximos 14 dias</button><button type="button" data-v="hist">Últimos 14 dias</button></div></div>
+  <section class="wrap mod" id="wxSec" data-tab="previsao">
+    <div class="mod-head"><h2>Previsão do tempo</h2><p>Uma praça por vez: os próximos 14 dias, com hoje em destaque. Passe o mouse num dia para ver em cores.</p>
+      <div class="ctl"><div class="line wx-cities" id="wxCities"></div><div class="seg" id="wxView" role="group" aria-label="Período do tempo"><button type="button" data-v="prox">Próximos 14 dias</button><button type="button" data-v="hist">Últimos 14 dias</button></div></div>
     </div>
     <div class="mod-body">
       <p class="insight" id="wxInsight"></p>
@@ -845,47 +739,14 @@ html[data-motion="theme"] { view-transition-name: root; }
     </div>
   </section>
 
-  <section class="wrap mod" id="salesSec">
-    <div class="mod-head"><h2>Vendas × tempo × eventos</h2><p id="sxLead">O realizado do Cubo contra o esperado, com a chuva e os eventos de cada mês: onde a venda caiu e se o tempo e a agenda ajudam a explicar.</p>
-      <div class="ctl" id="sxCtl" hidden>
-        <div class="seg" id="sxMetric" role="group" aria-label="Medida"><button type="button" data-v="rev">Receita</button><button type="button" data-v="pax">Passageiros</button><button type="button" data-v="tm">Tarifa média</button></div>
-        <div class="seg" id="sxView" role="group" aria-label="Visualização"><button type="button" data-v="heat">Mapa de calor</button><button type="button" data-v="cal">Calendário</button></div>
-      </div>
-      <p class="sx-file" id="sxFileInfo" hidden></p>
-    </div>
-    <div class="mod-body" id="sxBody">
-      <label class="sx-drop" id="sxDrop"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14"/></svg><b>Arraste aqui o Excel do Cubo (receita e passageiros)</b><small>Ou clique para escolher. O arquivo é lido neste navegador e fica só neste computador: nada é enviado para a internet nem para o site.</small><input type="file" id="sxFile" accept=".xlsx,.xlsm,.xls" hidden></label>
-      <div id="sxMain" hidden>
-        <p class="insight" id="sxInsight"></p>
-        <div class="sx-tools" id="sxTools">
-          <label class="sx-find"><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="sxQ" placeholder="Buscar mercado" autocomplete="off"></label>
-          <div class="seg" id="sxRegion" role="group" aria-label="Região"><button type="button" data-v="">Todos</button><button type="button" data-v="SP">SP</button><button type="button" data-v="RJ">RJ</button><button type="button" data-v="SUL">Sul</button><button type="button" data-v="MG">MG e DF</button></div>
-          <div class="seg" id="sxSort" role="group" aria-label="Ordem"><button type="button" data-v="rev">Maior venda</button><button type="button" data-v="worst">Maior queda</button><button type="button" data-v="az">A–Z</button></div>
-          <button type="button" class="chip" id="sxDown" aria-pressed="false">Só os que caíram</button>
-        </div>
-        <div id="sxHeat"><div class="hm-scroll"><div class="hm" id="sxGrid"></div></div>
-          <div class="sx-legend"><span><i class="lg-dn"></i>Abaixo do esperado</span><span><i class="lg-eq"></i>Dentro (±5%)</span><span><i class="lg-up"></i>Acima</span><span><svg class="drop" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.2C4.4 3.6 3 5.3 3 7a3 3 0 0 0 6 0c0-1.7-1.4-3.4-3-5.8Z"/></svg>Chuva acima do normal</span><span><i class="lg-ev"></i>Evento forte nas praças</span><span>* mês parcial</span></div>
-        </div>
-        <div id="sxYear" hidden></div>
-        <div id="sxDetail"></div>
-        <p class="note" id="sxNote"></p>
-      </div>
-    </div>
+  <section class="wrap mod" id="stripSec" data-tab="geral">
+    <div class="mod-head"><h2>Janelas de pico</h2><p>Dias seguidos com pressão de demanda alta pela frente. Clique para abrir no calendário.</p></div>
+    <div class="mod-body"><div class="windows" id="windows"></div></div>
   </section>
 
-  <section class="wrap mod" id="stripSec">
-    <div class="mod-head"><h2>Pressão dia a dia</h2><p>Os próximos 60 dias: altura e cor mostram a pressão de demanda de cada dia. Clique num dia para ver os eventos.</p></div>
-    <div class="mod-body">
-      <div class="strip" id="strip" aria-label="Pressão de demanda nos próximos 60 dias"></div>
-      <div class="strip-legend"><span id="stripFrom"></span><span>pressão de demanda, dia a dia · azul = alta</span><span id="stripTo"></span></div>
-      <div class="sub-h"><h3>Janelas de pico</h3><p>Dias seguidos com pressão alta pela frente</p></div>
-      <div class="windows" id="windows"></div>
-    </div>
-  </section>
-
-  <section class="wrap mod" id="agendaSec">
+  <section class="wrap mod" id="agendaSec" data-tab="demanda agenda">
     <div class="mod-head"><h2 id="listTitle">Agenda</h2><p id="listSub"></p>
-      <div class="ctl"><div class="seg" id="mode" role="group" aria-label="Visualização"><button type="button" data-m="lista">Agenda</button><button type="button" data-m="cal">Calendário</button></div></div>
+      <div class="ctl" hidden><div class="seg" id="mode" role="group" aria-label="Visualização"><button type="button" data-m="lista">Agenda</button><button type="button" data-m="cal">Calendário</button></div></div>
     </div>
     <div class="mod-body" id="content">
       <div id="viewList">
@@ -900,6 +761,12 @@ html[data-motion="theme"] { view-transition-name: root; }
       </div>
     </div>
   </section>
+
+  <section class="wrap mod" id="spotSec" data-tab="demanda">
+    <div class="mod-head"><h2>Em destaque</h2><p>Os eventos de maior pressão nas próximas seis semanas.</p></div>
+    <div class="mod-body"><div class="spot" id="spot"></div></div>
+  </section>
+
 </main>
 
 <footer class="wrap">
@@ -1251,7 +1118,6 @@ function histArrived() {
       if (st.wxView === 'hist') renderWx();
       if (st.mode === 'lista') renderList(); else renderCal();
       if (detailNow && $('det').classList.contains('on')) paintDetailWx(detailNow);
-      if (CUBO) { renderSales(); refreshSlides(); }
     });
   }, 250);
 }
@@ -1309,7 +1175,9 @@ function paintLive() {
   $('liveText').innerHTML = WX.busy && !t ? 'Lendo a previsão' : t ? `Previsão <b>${hm(t)}</b>` : 'Sem previsão';
   b.title = t ? `Previsão do tempo atualizada às ${hm(t)}. Atualiza sozinha a cada 30 minutos; clique para atualizar agora.` : 'Clique para tentar ler a previsão de novo.';
   const note = $('sentinelNote');
-  if (note) note.innerHTML = `Eventos de <b>${DATA.atualizado ? short(DATA.atualizado) : '—'}</b> · ${t ? `previsão do tempo às <b>${hm(t)}</b>` : WX.busy ? 'lendo a previsão do tempo' : 'previsão do tempo indisponível'} · pressão é comparativa, não previsão de vendas`;
+  if (note) note.textContent = 'Pressão de demanda é comparativa (0 a 100), não previsão de vendas.';
+  const up = $('updated');
+  if (up) up.textContent = `Dados atualizados · eventos ${DATA.atualizado ? short(DATA.atualizado) : '—'}${t ? ` · tempo ${hm(t)}` : ''}`;
 }
 let detailNow = null;
 function repaintWeather() {
@@ -1472,8 +1340,6 @@ function buildSlides() {
   out.push({ key: 'tipo', tone: 'name', label: 'Tipo em alta · 90 dias', value: topT ? topT.label : '—',
     detail: topT ? `${pct(byT.now[topT.k])} dos eventos dos próximos 90 dias${st.place ? ` em ${st.place} e nacionais` : ''} · ${plural(byT.soonCount(topT.k), 'evento', 'eventos')}.` : 'Sem tipo em destaque com estes filtros.',
     plot: 'radar', by: 'tipo', S: byT, sel: st.cat });
-  const sales = salesSlide();
-  if (sales) out.splice(1, 0, sales);
   const w = wxSummary(wxCity());
   out.push({ key: 'tempo', label: `Tempo em ${w.city} · 14 dias`, value: w.ok ? String(w.rain) : '—', unit: w.ok ? (w.rain === 1 ? 'dia de chuva' : 'dias de chuva') : '',
     detail: w.text, plot: 'tempo', city: w.city, series: w.ok ? w.days.map((d) => (wxGet(w.city, d) || {}).hi) : [] });
@@ -1512,11 +1378,6 @@ function drawSlidePlot(sl, force) {
     el.dataset.by = sl.by;
   } else if (sl.plot === 'tempo') {
     wxPlot(el, sl.city, Array.from({ length: WX_DAYS }, (_, k) => addDays(TODAY, k)), $('sentinelPlotTitle'), lg);
-  } else if (sl.plot === 'vendas') {
-    el._chart = null; el.classList.remove('still');
-    $('sentinelPlotTitle').textContent = `Maiores quedas · ${metricName()}`;
-    lg.innerHTML = `<span>${DROP}Chuva acima do normal</span><span><i class="bx" style="width:6px;height:6px;background:var(--accent)"></i>Evento forte</span>`;
-    el.innerHTML = sxMini(sl.rows);
   }
 }
 function wxPlot(el, city, days, titleEl, lgEl, height) {
@@ -1608,7 +1469,7 @@ function trendOf(raw) {
 }
 function paintTheaterTrend(card) {
   const host = $('theaterTrend');
-  if (card.plot === 'radar' || card.plot === 'vendas') { host.innerHTML = ''; return; }
+  if (card.plot === 'radar') { host.innerHTML = ''; return; }
   const raw = card.series || [];
   const win = Math.max(1, Math.round(raw.length / 8));
   const values = raw.map((_, i) => { const part = raw.slice(Math.max(0, i - win), i + win + 1).filter(Number.isFinite); return part.length ? part.reduce((s, v) => s + v, 0) / part.length : NaN; });
@@ -1632,7 +1493,7 @@ function paintTheaterTrend(card) {
 function paintTheater() {
   const card = sentinel.slides[theater.index];
   if (!card || !$('theater').open) return;
-  const visual = card.plot === 'radar' ? radarSvg(card.S, card.sel, card.label) : card.plot === 'vendas' ? sxMini(card.rows) : '';
+  const visual = card.plot === 'radar' ? radarSvg(card.S, card.sel, card.label) : '';
   const long = card.tone === 'name' || String(card.value).length > 12;
   $('theaterFrame').innerHTML = `<div class="${visual ? 'has-visual' : ''}"><div><h2>${esc(card.label)}</h2><strong class="${long ? 'long' : ''}">${esc(card.value)}${card.unit ? `<small>${esc(card.unit)}</small>` : ''}</strong><p>${esc(card.detail)}</p></div>${visual ? `<div class="theater-visual">${visual}</div>` : ''}</div>`;
   $('theaterScope').textContent = scopeText();
@@ -1706,26 +1567,13 @@ function renderSpot() {
 }
 
 /* ---------- para onde olhar ---------- */
-function renderLook() {
-  const S = shareBy(st.rBy, st.rMetric);
-  $$('#radarBy button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === st.rBy)));
-  $$('#radarMetric button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === st.rMetric)));
-  $('radarSub').textContent = `${st.rBy === 'tipo' ? 'Por tipo' : 'Por praça'}, ${st.rMetric === 'n' ? 'pela quantidade de eventos' : 'pela pressão somada'}: onde a demanda se concentra nos próximos 90 dias em comparação com a agenda inteira.${st.rBy === 'tipo' && st.place ? ` Praça: ${st.place}.` : ''}${st.rBy === 'praca' && st.cat ? ` Tipo: ${catName(st.cat)}.` : ''}`;
-  const sel = st.rBy === 'tipo' ? st.cat : st.place;
-  const top = topOf(S);
-  $('lookInsight').innerHTML = top ? `<em>${esc(top.label)}</em> concentra ${pct(S.now[top.k])} ${st.rMetric === 'n' ? 'dos eventos' : 'da pressão'} dos próximos 90 dias <span>· ${S.now[top.k] > (S.all[top.k] || 0) + 0.02 ? 'acima' : S.now[top.k] < (S.all[top.k] || 0) - 0.02 ? 'abaixo' : 'perto'} do peso que tem na agenda inteira (${pct(S.all[top.k])}).</span>` : 'Poucos dados com estes filtros.';
-  $('radar').innerHTML = radarSvg(S, sel, 'Radar: onde os eventos se concentram');
-  const order = S.axes.slice().sort((a, b) => (S.now[b.k] || 0) - (S.now[a.k] || 0));
-  const mx = Math.max(0.0001, ...order.map((a) => S.now[a.k] || 0));
-  $('shares').innerHTML = order.map((a, k) => `<button type="button" class="share${a.k === sel ? ' on' : ''}" data-k="${esc(a.k)}" style="--k:${k}"><span>${esc(a.label)}</span><b>${pct(S.now[a.k])}</b><i style="--w:${Math.round(((S.now[a.k] || 0) / mx) * 100)}%"></i></button>`).join('');
-}
 function pickAxis(by, k) {
   if (by === 'tipo') st.cat = st.cat === k ? '' : k;
   else { st.place = st.place === k ? '' : k; store.set('place', st.place); }
   if (st.w === 'hoje') st.w = '30';
   update(true);
 }
-function pickDay(d) { st.w = 'dia'; st.day = d; st.calDay = d; st.month = d.slice(0, 7); st.mode = 'lista'; update(); setTimeout(() => $('agendaSec').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }), 120); }
+function pickDay(d) { st.w = 'dia'; st.day = d; st.calDay = d; st.month = d.slice(0, 7); if (tab !== 'agenda') { tab = 'agenda'; store.set('tab', tab); } update(); setTimeout(() => $('agendaSec').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }), 120); }
 
 /* ---------- tempo nas praças ---------- */
 function renderWx() {
@@ -1736,7 +1584,8 @@ function renderWx() {
   if (hist) ensureHist(cities, days[0], days[days.length - 1]);
   const grid = $('wxGrid');
   grid.style.setProperty('--n', days.length);
-  const order = cities.slice().sort((a, b) => (b === st.place) - (a === st.place));
+  const order = [focus];
+  $('wxCities').innerHTML = cities.map((c) => `<button type="button" class="chip" data-city="${esc(c)}" aria-pressed="${c === focus}">${esc(c)}</button>`).join('');
   const head = `<div class="corner">${hist ? 'Registro' : 'Previsão'}</div>` + days.map((d) => {
     const dt = asDate(d), wd = dt.getDay(), evs = evOn(d), pk = evs.length ? evs[0].i : 0;
     return `<div class="hd${wd === 5 || wd === 0 ? ' wk' : ''}${d === TODAY ? ' today' : ''}" data-tip="${esc(`${label(d)}\n${evs.length ? `${plural(evs.length, 'evento', 'eventos')} · pressão ${pk}\n${evs.slice(0, 3).map((e) => e.n).join(', ')}` : 'Sem evento marcado'}`)}">${d === TODAY ? 'hoje' : WEEK[wd]}<b>${dt.getDate()}</b><i class="${evs.length ? (pk >= HI ? 'hi' : '') : 'no'}"></i></div>`;
@@ -1766,9 +1615,16 @@ function renderWx() {
   const chartDays = days;
   wxPlot($('wxChart'), focus, chartDays, $('wxChartTitle'), $('wxLegend'), 240);
   const t = WX.at ? new Date(WX.at) : null;
-  $('wxNote').innerHTML = `${hist ? 'Registro: Open-Meteo Historical Weather (reanálise ERA5), até ontem.' : `Previsão: Open-Meteo, modelos meteorológicos combinados${t ? `, lida às ${hm(t)}` : ''}; atualiza sozinha a cada 30 minutos.`} Ponto no canto do dia = evento naquela praça (azul = pressão alta). Clique num dia para ver os eventos; clique numa praça para o gráfico.${st.place ? '' : ' Com uma praça escolhida nos filtros, ela vem primeiro.'}`;
+  $('wxNote').innerHTML = hist ? 'Registro do tempo: Open-Meteo (reanálise ERA5), até ontem.' : 'Previsão: Open-Meteo, atualizada sozinha a cada 30 minutos. Ponto no canto do dia = evento na praça.';
 }
 $('wxView').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (!b || b.dataset.v === st.wxView) return; st.wxView = b.dataset.v; softSwap([$('wxGrid'), $('wxChart'), $('wxInsight')], renderWx); });
+$('wxCities').addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-city]');
+  if (!b) return;
+  if (st.place && st.place !== b.dataset.city) { st.place = ''; store.set('place', ''); buildIndex(); winCache = null; }
+  st.wxCity = b.dataset.city; store.set('wxcity', st.wxCity);
+  softSwap([$('wxGrid'), $('wxChart'), $('wxInsight')], () => { renderWx(); refreshSlides(); paintKpis(); paintReceipt(); paintBubble(); });
+});
 $('wxGrid').addEventListener('click', (e) => {
   const city = e.target.closest('.city[data-city]');
   if (city) { if (!st.place) { st.wxCity = city.dataset.city; store.set('wxcity', st.wxCity); softSwap([$('wxChart'), $('wxInsight')], () => { renderWx(); refreshSlides(); paintKpis(); }); } else toast('Com uma praça nos filtros, o tempo segue a praça escolhida.'); return; }
@@ -1776,391 +1632,7 @@ $('wxGrid').addEventListener('click', (e) => {
   if (cell) { if (!st.place) { st.wxCity = cell.dataset.city; store.set('wxcity', st.wxCity); } pickDay(cell.dataset.d); }
 });
 
-/* ---------- vendas × tempo × eventos (Cubo) ----------
-   O realizado mensal por mercado vem do Excel do Cubo, lido no navegador e guardado só neste computador.
-   Esperado = o peso que o mercado costuma ter no resto da rede (mediana dos outros meses) aplicado ao
-   movimento do mês. Férias e feriados nacionais mexem com toda a rede e por isso não viram "queda";
-   o que sobra é o efeito local, onde a chuva e os eventos das praças entram. Com meta no arquivo, vale a meta. */
-const UF = { 'São Paulo': 'SP', 'Campinas': 'SP', 'Bauru': 'SP', 'Santos': 'SP', 'Ribeirão Preto': 'SP', 'Araraquara': 'SP', 'Franca': 'SP', 'Itapetininga': 'SP', 'Jundiaí': 'SP', 'São José do Rio Preto': 'SP', 'Sorocaba': 'SP', 'São José dos Campos': 'SP',
-  'Rio de Janeiro': 'RJ', 'Niterói': 'RJ', 'Campos dos Goytacazes': 'RJ', 'Macaé': 'RJ', 'Cabo Frio': 'RJ', 'Nova Friburgo': 'RJ', 'Itaperuna': 'RJ', 'Araruama': 'RJ',
-  'Curitiba': 'PR', 'Foz do Iguaçu': 'PR', 'Maringá': 'PR', 'Lages': 'SC', 'Balneário Camboriú': 'SC', 'Florianópolis': 'SC', 'Blumenau': 'SC', 'Concórdia': 'SC', 'Joinville': 'SC', 'Mafra': 'SC',
-  'Porto Alegre': 'RS', 'Santa Maria': 'RS', 'Belo Horizonte': 'MG', 'Governador Valadares': 'MG', 'Poços de Caldas': 'MG', 'Muriaé': 'MG', 'Pouso Alegre': 'MG', 'Brasília': 'DF' };
-const MK_CITY = {
-  'SAO PAULO': ['São Paulo'], 'SP': ['São Paulo'], 'GRANDE SAO PAULO': ['São Paulo'], 'ABC': ['São Paulo'], 'ABC LITORAL': ['São Paulo'], 'RIO DE JANEIRO': ['Rio de Janeiro'], 'RIO': ['Rio de Janeiro'],
-  'NIT': ['Niterói'], 'NITEROI': ['Niterói'], 'BELO HORIZONTE': ['Belo Horizonte'], 'FOZ': ['Foz do Iguaçu'], 'CAMPINAS': ['Campinas'], 'INTERIOR SP': ['Bauru'], 'CURITIBA': ['Curitiba'],
-  'INTERIOR SC': ['Lages'], 'LITORAL SC': ['Balneário Camboriú'], 'SC': ['Balneário Camboriú'], 'PORTO ALEGRE': ['Porto Alegre'], 'SANTA MARIA': ['Santa Maria'], 'FLORIANOPOLIS': ['Florianópolis'],
-  'BLUMENAU': ['Blumenau'], 'CONCORDIA': ['Concórdia'], 'JOINVILLE': ['Joinville'], 'MAFRA': ['Mafra'], 'GOV.VALADARES': ['Governador Valadares'], 'CAMPOS': ['Campos dos Goytacazes'],
-  'CPS': ['Campos dos Goytacazes'], 'BAIXADA SANTISTA': ['Santos'], 'BAIXADA E CPO GRN': ['Santos'], 'INTERIOR SP MG': ['Poços de Caldas'], 'RAPIDO R. PRETO': ['Ribeirão Preto'],
-  'RIBEIRAO PRETO': ['Ribeirão Preto'], 'CAMPOS E NORTE FLUM.': ['Campos dos Goytacazes'], 'NORTE FLUM.': ['Campos dos Goytacazes'], 'FRIB/REG.SERRANA': ['Nova Friburgo'], 'FRIB': ['Nova Friburgo'],
-  'MACAE QUISSAMA': ['Macaé'], 'MACAE': ['Macaé'], 'MAC': ['Macaé'], 'ATE 100 KM MACAE SELETIVO': ['Macaé'], 'MURIAE/TOMBOS': ['Muriaé'], 'PIRAPETINGA/ITAPERUNA': ['Itaperuna'],
-  'REG.LAGOS': ['Cabo Frio'], 'C.FRIO': ['Cabo Frio'], 'CBF': ['Cabo Frio'], 'ARAR': ['Araruama'], 'SAQ': ['Araruama'], 'ARARAQUARA': ['Araraquara'], 'POCOS': ['Poços de Caldas'],
-  'FRANCA': ['Franca'], 'ITAPETININGA': ['Itapetininga'], 'JUNDIAI': ['Jundiaí'], 'MARINGA': ['Maringá'], 'SAO JOSE DO RIO PRETO': ['São José do Rio Preto'], 'SOROCABA': ['Sorocaba'],
-  'SUL DE MINAS': ['Pouso Alegre'], 'VALE DO PARAIBA': ['São José dos Campos'], 'BRASILIA': ['Brasília'], 'SANTOS': ['Santos'],
-};
-const WX_REP = { 'Niterói': 'Rio de Janeiro' }; // mesmo tempo: uma chamada a menos
-const upNorm = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase().replace(/\s+/g, ' ').trim();
-const lowNorm = (s) => upNorm(s).toLowerCase();
-function marketCities(name) {
-  const out = [];
-  const add = (list) => list.forEach((c) => { if (!out.includes(c)) out.push(c); });
-  const full = upNorm(name);
-  if (MK_CITY[full]) { add(MK_CITY[full]); return out; }
-  for (const part of full.split(/\s+-\s+/)) {
-    if (MK_CITY[part]) { add(MK_CITY[part]); continue; }
-    for (const sub of part.split('/')) {
-      const s = sub.trim();
-      if (MK_CITY[s]) add(MK_CITY[s]);
-      else { const hit = Object.keys(CITY).find((c) => upNorm(c) === s); if (hit) add([hit]); }
-    }
-  }
-  return out.slice(0, 4);
-}
-const KEEP_UP = new Set(['SP', 'RJ', 'SC', 'MG', 'ABC', 'ND', 'KM', 'CPS', 'MAC', 'NIT', 'CBF', 'GRN', 'CPO']);
-const FIXW = { SAO: 'São', RIBEIRAO: 'Ribeirão', MACAE: 'Macaé', FLORIANOPOLIS: 'Florianópolis', CONCORDIA: 'Concórdia', MURIAE: 'Muriaé', JUNDIAI: 'Jundiaí', MARINGA: 'Maringá', PARAIBA: 'Paraíba', POCOS: 'Poços', ATE: 'Até', RAPIDO: 'Rápido', QUISSAMA: 'Quissamã' };
-const prettyMarket = (n) => String(n).toLowerCase().replace(/[a-zà-ÿ]+/g, (w, i) => { const U = upNorm(w); if (KEEP_UP.has(U)) return U; if (FIXW[U]) return FIXW[U]; if (i > 0 && ['de', 'do', 'da', 'dos', 'das', 'e'].includes(w)) return w; return w.charAt(0).toUpperCase() + w.slice(1); }).replace(/\s+-\s+/g, ' – ');
-const MONTH_N = { janeiro: 1, fevereiro: 2, marco: 3, abril: 4, maio: 5, junho: 6, julho: 7, agosto: 8, setembro: 9, outubro: 10, novembro: 11, dezembro: 12, jan: 1, fev: 2, mar: 3, abr: 4, mai: 5, jun: 6, jul: 7, ago: 8, set: 9, out: 10, nov: 11, dez: 12 };
-function periodOf(v, year) {
-  if (v instanceof Date) return { kind: 'dia', key: iso(v) };
-  if (typeof v === 'number' && v > 30000 && v < 80000) { const d = new Date(Math.round((v - 25569) * 864e5)); return { kind: 'dia', key: iso(new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 12)) }; }
-  const s = lowNorm(v);
-  let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-  if (m) return { kind: 'dia', key: `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}` };
-  if ((m = s.match(/^(\d{4})-(\d{2})-(\d{2})/))) return { kind: 'dia', key: m[0] };
-  if ((m = s.match(/^\d{1,2}\s*-\s*([a-z]+)$/)) && MONTH_N[m[1]]) return { kind: 'mes', key: `${year}-${String(MONTH_N[m[1]]).padStart(2, '0')}` };
-  if ((m = s.match(/^([a-z]+)[\/ -]?(\d{4})?$/)) && MONTH_N[m[1]] && m[1].length >= 3) return { kind: 'mes', key: `${m[2] || year}-${String(MONTH_N[m[1]]).padStart(2, '0')}` };
-  return null;
-}
-const measureKind = (name) => { const s = lowNorm(name); return `${/meta|orcad|objetivo|budget/.test(s) ? 'meta-' : ''}${/passag|pax|passageir/.test(s) ? 'pax' : 'rev'}`; };
-function cuboFromWorkbook(wb, file) {
-  const measures = {};
-  let year = Number(TODAY.slice(0, 4));
-  const days = new Set();
-  for (const sn of wb.SheetNames) {
-    const rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], { header: 1, raw: true, defval: null, blankrows: false });
-    rows.forEach((r) => { if (r && lowNorm(r[0]) === 'ano' && r[1] != null) { const y = String(r[1]).match(/\d{4}/); if (y) year = Number(y[0]); } });
-    let hi = -1, cols = [];
-    for (let i = 0; i < Math.min(rows.length, 40) && hi < 0; i++) { const ps = (rows[i] || []).map((v) => periodOf(v, year)); if (ps.filter(Boolean).length >= 2) { hi = i; cols = ps; } }
-    if (hi < 0) continue;
-    let measure = sn;
-    for (let i = hi - 1; i >= 0; i--) { const a = rows[i] && rows[i][0]; if (a != null && a !== '' && !/^(ano|tipo de linha|rotulos de linha)$/.test(lowNorm(a))) { measure = String(a); break; } }
-    const kind = measureKind(measure);
-    if (measures[kind]) continue;
-    const series = {};
-    for (let i = hi + 1; i < rows.length; i++) {
-      const r = rows[i] || [], nm = r[0];
-      if (nm == null || String(nm).trim() === '') continue;
-      const vals = {}; let any = false;
-      cols.forEach((p, j) => { if (p && typeof r[j] === 'number') { vals[p.key] = (vals[p.key] || 0) + r[j]; any = true; if (p.kind === 'dia') days.add(p.key); } });
-      if (any) series[String(nm).trim()] = vals;
-    }
-    measures[kind] = { name: measure, series, gran: cols.find(Boolean).kind };
-  }
-  const base = measures.rev || measures.pax;
-  if (!base) throw new Error('Não achei receita nem passagens por mês nessa planilha.');
-  const monthsSet = new Set();
-  Object.values(measures).forEach((m) => Object.values(m.series).forEach((v) => Object.keys(v).forEach((k) => monthsSet.add(k.slice(0, 7)))));
-  const months = [...monthsSet].sort();
-  const idx = new Map(months.map((m, i) => [m, i]));
-  const toArr = (vals) => { const a = months.map(() => null); if (vals) Object.entries(vals).forEach(([k, v]) => { const i = idx.get(k.slice(0, 7)); a[i] = (a[i] || 0) + v; }); return a; };
-  const isTotal = (n) => /^total/.test(lowNorm(n));
-  const get = (kind, n) => (measures[kind] ? toArr(measures[kind].series[n]) : null);
-  const totalName = Object.keys(base.series).find(isTotal);
-  let markets = Object.keys(base.series).filter((n) => !isTotal(n)).map((n) => ({ n, label: prettyMarket(n), cities: marketCities(n), rev: get('rev', n), pax: get('pax', n), mrev: get('meta-rev', n), mpax: get('meta-pax', n) }));
-  const sumArr = (k) => months.map((_, i) => markets.reduce((s, m) => s + ((m[k] && m[k][i]) || 0), 0));
-  const total = { rev: measures.rev ? (totalName ? get('rev', totalName) : sumArr('rev')) : null, pax: measures.pax ? (totalName ? get('pax', totalName) : sumArr('pax')) : null };
-  const key0 = measures.rev ? 'rev' : 'pax';
-  const grand = total[key0].reduce((s, v) => s + (v || 0), 0);
-  markets = markets.filter((m) => m[key0].reduce((s, v) => s + (v || 0), 0) > grand * 0.0005);
-  const lastM = months[months.length - 1];
-  const mod = file && file.lastModified ? iso(new Date(file.lastModified)) : TODAY;
-  let asOf = monthEnd(lastM);
-  if (base.gran === 'dia' && days.size) asOf = [...days].sort().pop();
-  else if (mod.slice(0, 7) === lastM) asOf = addDays(mod, -1); // o Cubo fecha em D-1
-  if (asOf < `${lastM}-01`) asOf = `${lastM}-01`;
-  return { file: file ? file.name : 'Cubo', at: Date.now(), year, gran: base.gran, months, asOf, measures: Object.fromEntries(Object.entries(measures).map(([k, m]) => [k, m.name])), markets, total };
-}
-let CUBO = null;
-try { CUBO = JSON.parse(store.get('cubo') || 'null'); if (CUBO && !Array.isArray(CUBO.markets)) CUBO = null; } catch { CUBO = null; }
-const SX = { metric: ['rev', 'pax', 'tm'].includes(store.get('sx.metric')) ? store.get('sx.metric') : 'rev', view: 'heat', region: '', sort: 'rev', q: '', onlyDown: false, focusK: null, sel: null };
-function loadSheetJS() {
-  if (window.XLSX) return Promise.resolve();
-  return new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload = () => res(); s.onerror = () => rej(new Error('Não consegui carregar o leitor de Excel (sem internet?).')); document.head.appendChild(s); });
-}
-async function loadCuboBuffer(buf, file) {
-  $('sxDrop').classList.add('busy');
-  try {
-    await loadSheetJS();
-    const wb = XLSX.read(buf, { type: 'array', cellDates: false });
-    CUBO = cuboFromWorkbook(wb, file);
-    store.set('cubo', JSON.stringify(CUBO));
-    SX.focusK = null; SX.sel = null; sxMemo = null;
-    toast(`${CUBO.markets.length} mercados lidos · ${MON[Number(CUBO.months[0].slice(5)) - 1]} a ${MON[Number(CUBO.months[CUBO.months.length - 1].slice(5)) - 1]} de ${CUBO.year}`);
-    softSwap([$('sxBody')], () => { renderSales(); refreshSlides(); });
-  } catch (err) { toast(err.message || 'Não consegui ler esse arquivo.'); }
-  finally { $('sxDrop').classList.remove('busy'); }
-}
-function loadCuboFile(file) { if (!file) return; file.arrayBuffer().then((buf) => loadCuboBuffer(buf, { name: file.name, lastModified: file.lastModified })); }
-
-const brl = (v) => (v == null || !Number.isFinite(v) ? '—' : Math.abs(v) >= 1e6 ? `R$ ${(v / 1e6).toFixed(1).replace('.', ',')} mi` : Math.abs(v) >= 1e3 ? `R$ ${Math.round(v / 1e3)} mil` : `R$ ${Math.round(v)}`);
-const paxF = (v) => (v == null || !Number.isFinite(v) ? '—' : v >= 1e3 ? `${(v / 1e3).toFixed(v >= 1e5 ? 0 : 1).replace('.', ',')} mil` : String(Math.round(v)));
-const tmF = (v) => (v == null || !Number.isFinite(v) ? '—' : `R$ ${v.toFixed(2).replace('.', ',')}`);
-const fmtM = (v, metric = SX.metric) => (metric === 'rev' ? brl(v) : metric === 'pax' ? paxF(v) : tmF(v));
-const sgn = (v) => (v == null || !Number.isFinite(v) ? '—' : `${v > 0.0049 ? '+' : v < -0.0049 ? '−' : ''}${Math.abs(Math.round(v * 100))}%`);
-const vcls = (v) => (v == null ? 'na' : v <= -0.05 ? 'dn' : v >= 0.05 ? 'up' : 'eq');
-const metricName = () => ({ rev: 'receita', pax: 'passageiros', tm: 'tarifa média' }[SX.metric]);
-const monthName = (k) => { const mk = CUBO.months[k]; return `${MONL[Number(mk.slice(5)) - 1]}${mk.slice(0, 4) !== String(CUBO.year) ? ` de ${mk.slice(0, 4)}` : ''}`; };
-const isPartial = (k) => k === CUBO.months.length - 1 && CUBO.asOf < monthEnd(CUBO.months[k]);
-const defaultFocus = () => { const M = CUBO.months.length; return isPartial(M - 1) && M > 1 ? M - 2 : M - 1; };
-const sxWxCities = (m) => [...new Set(m.cities.map((c) => WX_REP[c] || c))].filter(hasCity);
-const median = (a) => { const s = a.filter(Number.isFinite).sort((x, y) => x - y); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : null; };
-function metricVals(m, metric) {
-  if (metric === 'tm') return m.rev && m.pax ? m.rev.map((v, i) => (m.pax[i] ? v / m.pax[i] : null)) : CUBO.months.map(() => null);
-  return m[metric] || CUBO.months.map(() => null);
-}
-function expectedOf(m, metric) {
-  const meta = metric === 'rev' ? m.mrev : metric === 'pax' ? m.mpax : (m.mrev && m.mpax ? m.mrev.map((v, i) => (m.mpax[i] ? v / m.mpax[i] : null)) : null);
-  if (meta && meta.some((v) => Number.isFinite(v) && v > 0)) return { exp: meta, basis: 'meta' };
-  const T = CUBO.total, vals = metricVals(m, metric);
-  const rest = (i) => {
-    if (metric === 'tm') { if (!T.rev || !T.pax) return null; const rv = T.rev[i] - ((m.rev && m.rev[i]) || 0), px = T.pax[i] - ((m.pax && m.pax[i]) || 0); return px > 0 ? rv / px : null; }
-    return T[metric] ? T[metric][i] - ((m[metric] && m[metric][i]) || 0) : null;
-  };
-  const ratio = vals.map((v, i) => { const r = rest(i); return Number.isFinite(v) && v > 0 && r > 0 ? v / r : null; });
-  return { exp: ratio.map((_, i) => { const md = median(ratio.filter((x, j) => j !== i)); const r = rest(i); return md != null && r > 0 && ratio.filter((x, j) => j !== i && Number.isFinite(x)).length >= 3 ? md * r : null; }), basis: 'rede' };
-}
-function monthWindow(k) {
-  const mk = CUBO.months[k], start = `${mk}-01`;
-  let stop = monthEnd(mk);
-  if (k === CUBO.months.length - 1 && CUBO.asOf < stop) stop = CUBO.asOf;
-  const last = addDays(TODAY, -1);
-  if (stop > last) stop = last;
-  return { start, stop, n: diffDays(start, stop) + 1 };
-}
-function marketWx(cities, k, win) {
-  if (!cities.length || win.n < 1) return null;
-  let rd = 0, hd = 0, mm = 0, ok2 = 0;
-  const per = [];
-  for (const c of cities) {
-    const map = WX.days.get(c);
-    if (!map) continue;
-    let r1 = 0, h1 = 0, m1 = 0, cnt = 0;
-    for (const d of win.days) { const r = map.get(d); if (!r) continue; cnt++; if (rainy(r)) r1++; if (heavy(r)) h1++; m1 += r.mm || 0; }
-    if (cnt < win.n * 0.8) continue;
-    ok2++; rd += r1 * win.n / cnt; hd += h1 * win.n / cnt; mm += m1 * win.n / cnt; per.push({ c, rd: r1, mm: m1 });
-  }
-  return ok2 ? { rd: rd / ok2, hd: hd / ok2, mm: mm / ok2, n: win.n, per } : null;
-}
-const evFirst = () => EV().reduce((m2, e) => (e.d < m2 ? e.d : m2), '9999-12-31');
-function marketEvents(m, k) {
-  const mk = CUBO.months[k], s = `${mk}-01`, e2 = monthEnd(mk);
-  if (e2 < evFirst()) return null;
-  return EV().filter((e) => m.cities.includes(e.p) && e.d <= e2 && end(e) >= s).sort((a, b) => b.i - a.i);
-}
-let sxMemo = null;
-function salesModel() {
-  const key = `${SX.metric}|${CUBO.at}|${WX.ver}|${EV().length}|${TODAY}`;
-  if (sxMemo && sxMemo.key === key) return sxMemo;
-  const wins = CUBO.months.map((_, k) => { const w = monthWindow(k); w.days = Array.from({ length: Math.max(0, w.n) }, (_, i) => addDays(w.start, i)); return w; });
-  const rows = CUBO.markets.map((m, idx) => {
-    const vals = metricVals(m, SX.metric), { exp, basis } = expectedOf(m, SX.metric), wxc = sxWxCities(m);
-    const v = vals.map((x, k) => (Number.isFinite(x) && Number.isFinite(exp[k]) && exp[k] > 0 ? x / exp[k] - 1 : null));
-    return { m, idx, vals, exp, basis, v, wxc, wx: CUBO.months.map((_, k) => marketWx(wxc, k, wins[k])), ev: CUBO.months.map((_, k) => marketEvents(m, k)), tot: vals.reduce((s, x) => s + (Number.isFinite(x) ? x : 0), 0) };
-  });
-  const med = CUBO.months.map((_, k) => ({ rd: median(rows.map((r) => r.wx[k] && r.wx[k].rd)), hd: median(rows.map((r) => r.wx[k] && r.wx[k].hd)) }));
-  rows.forEach((r) => {
-    r.rainWhy = r.wx.map((w, k) => (!w || med[k].rd == null ? null : w.rd - med[k].rd >= 3 ? 'dias' : w.hd - med[k].hd >= 2 ? 'forte' : ''));
-    r.rain = r.rainWhy.map((x) => (x == null ? null : Boolean(x)));
-    r.evf = r.ev.map((l) => (l == null ? null : l.some((e) => e.i >= HI)));
-  });
-  const cities = [...new Set(rows.flatMap((r) => r.wxc))];
-  let have = 0;
-  cities.forEach((c) => CUBO.months.forEach((mk) => { if (WX.loaded.has(`${c}|${mk}`)) have++; }));
-  return (sxMemo = { key, rows, med, wins, need: cities.length * CUBO.months.length, have });
-}
-function cuboWx() {
-  if (!CUBO) return;
-  const cities = [...new Set(CUBO.markets.flatMap(sxWxCities))];
-  const last = CUBO.asOf < addDays(TODAY, -1) ? CUBO.asOf : addDays(TODAY, -1);
-  ensureHist(cities, `${CUBO.months[0]}-01`, last);
-}
-const DROP = '<svg class="drop" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.2C4.4 3.6 3 5.3 3 7a3 3 0 0 0 6 0c0-1.7-1.4-3.4-3-5.8Z"/></svg>';
-function cellTip(r, k) {
-  const w = r.wx[k], ev = r.ev[k], mdn = salesModel().med[k];
-  return [`${r.m.label} · ${monthName(k)}${isPartial(k) ? ` (até ${short(CUBO.asOf)})` : ''}`,
-    `${cap(metricName())}: ${fmtM(r.vals[k])} · ${r.basis === 'meta' ? 'meta' : 'esperado'} ${fmtM(r.exp[k])}${r.v[k] != null ? ` (${sgn(r.v[k])})` : ''}`,
-    w ? `Chuva: ${Math.round(w.rd)} dias${mdn.rd != null ? ` (rede ${Math.round(mdn.rd)})` : ''} · ${Math.round(w.hd)} fortes · ${Math.round(w.mm)} mm` : r.wxc.length ? 'Chuva: lendo o registro…' : 'Chuva: sem praça definida',
-    ev == null ? 'Eventos: agenda começa em agosto' : ev.length ? `Eventos: ${ev.length}${ev.filter((e) => e.i >= HI).length ? ` (${ev.filter((e) => e.i >= HI).length} com pressão alta)` : ''} · ${ev.slice(0, 2).map((e) => e.n).join(', ')}` : 'Eventos: nenhum nas praças do mercado'].join('\n');
-}
-function sxRows(model) {
-  const k = SX.focusK, q2 = lowNorm(SX.q);
-  let rows = model.rows.filter((r) => {
-    if (q2 && !lowNorm(r.m.label).includes(q2) && !r.m.cities.some((c) => lowNorm(c).includes(q2))) return false;
-    if (SX.region) { const ufs = r.m.cities.map((c) => UF[c]); if (SX.region === 'SUL' ? !ufs.some((u) => ['PR', 'SC', 'RS'].includes(u)) : SX.region === 'MG' ? !ufs.some((u) => ['MG', 'DF'].includes(u)) : !ufs.includes(SX.region)) return false; }
-    if (SX.onlyDown && vcls(r.v[k]) !== 'dn') return false;
-    return true;
-  });
-  if (SX.sort === 'worst') rows = rows.slice().sort((a, b) => (a.v[k] ?? 9) - (b.v[k] ?? 9));
-  else if (SX.sort === 'az') rows = rows.slice().sort((a, b) => a.m.label.localeCompare(b.m.label, 'pt-BR'));
-  else rows = rows.slice().sort((a, b) => b.tot - a.tot);
-  return rows;
-}
-function readOf(r, k) {
-  const c = vcls(r.v[k]), rain = r.rain[k], ev = r.evf[k], meta = r.basis === 'meta';
-  const ref = meta ? 'a meta' : 'o esperado';
-  const wet = r.rainWhy[k] === 'forte' ? 'mais chuva forte que o resto da rede' : 'mais dias de chuva que o resto da rede';
-  if (c === 'na') return 'Sem base suficiente para comparar este mês.';
-  if (c === 'dn') {
-    if (rain && ev) return `Caiu ${sgn(r.v[k])} contra ${ref} num mês com ${wet} e evento forte nas praças: a chuva pode explicar parte da queda; com evento forte, vale ver também se oferta e preço acompanharam a procura.`;
-    if (rain) return `Caiu ${sgn(r.v[k])} contra ${ref} num mês com ${wet}: a chuva pode explicar parte da queda.`;
-    if (ev) return `Caiu ${sgn(r.v[k])} mesmo com evento forte nas praças: vale ver se oferta e preço acompanharam a procura.`;
-    if (rain === null) return `Caiu ${sgn(r.v[k])} contra ${ref}; o registro do tempo deste mês ainda está chegando.`;
-    return `Caiu ${sgn(r.v[k])} contra ${ref} sem chuva nem evento fora do comum: a queda pede olhar preço, oferta e concorrência.`;
-  }
-  if (c === 'up') return ev ? `Acima de ${ref} (${sgn(r.v[k])}), com evento forte nas praças ajudando a explicar a alta.` : `Acima de ${ref} (${sgn(r.v[k])}).${rain ? ' Mesmo com chuva acima do normal.' : ''}`;
-  return `Dentro de ${ref} (${sgn(r.v[k])}).${rain ? ' A chuva acima do normal não derrubou a venda.' : ''}`;
-}
-function holidaysOf(y) {
-  const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3);
-  const h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451);
-  const month = Math.floor((h + l - 7 * m + 114) / 31), day = ((h + l - 7 * m + 114) % 31) + 1, easter = iso(new Date(y, month - 1, day, 12));
-  const map = new Map([['01-01', 'Confraternização'], ['04-21', 'Tiradentes'], ['05-01', 'Dia do Trabalho'], ['09-07', 'Independência'], ['10-12', 'N. Sra. Aparecida'], ['11-02', 'Finados'], ['11-15', 'Proclamação da República'], ['11-20', 'Consciência Negra'], ['12-25', 'Natal']].map(([md, n]) => [`${y}-${md}`, n]));
-  [[-48, 'Carnaval'], [-47, 'Carnaval'], [-2, 'Sexta-feira Santa'], [60, 'Corpus Christi']].forEach(([off, n]) => map.set(addDays(easter, off), n));
-  return map;
-}
-const holCache = new Map();
-const holidayOf = (d) => { const y = Number(d.slice(0, 4)); if (!holCache.has(y)) holCache.set(y, holidaysOf(y)); return holCache.get(y).get(d); };
-function monthCal(r, k, tag = 'div') {
-  const mk = CUBO.months[k], [y, mo] = mk.split('-').map(Number), lead = new Date(y, mo - 1, 1, 12).getDay(), nd = Number(monthEnd(mk).slice(8));
-  const v = r.v[k], c = vcls(v);
-  const cells = Array.from({ length: nd }, (_, i) => {
-    const d = `${mk}-${String(i + 1).padStart(2, '0')}`;
-    const recs = r.wxc.map((cc) => [cc, wxGet(cc, d)]).filter((x) => x[1]);
-    const mm = recs.length ? recs.reduce((s, x) => s + (x[1].mm || 0), 0) / recs.length : null;
-    const hv = recs.some((x) => heavy(x[1]));
-    const evs = EV().filter((e) => r.m.cities.includes(e.p) && onDay(e, d)).sort((a, b) => b.i - a.i);
-    const hol = holidayOf(d), fut = d > CUBO.asOf;
-    const tip = `${label(d)}${hol ? ` · ${hol}` : ''}\n${recs.length ? `${recs.map((x) => `${x[0]} ${mmF(x[1].mm)}`).join(' · ')}${hv ? '\nChuva forte' : ''}` : 'Sem registro do tempo'}${evs.length ? `\nEventos: ${evs.slice(0, 3).map((e) => `${e.n} (${e.i})`).join(', ')}` : ''}${fut ? '\nDepois do corte do Cubo' : ''}`;
-    return `<span class="d${hv ? ' hv' : ''}${hol ? ' hol' : ''}${fut ? ' fut' : ''}" style="--r:${mm == null ? 0 : Math.min(1, mm / 25).toFixed(2)}" data-tip="${esc(tip)}">${i + 1}${evs.length ? `<i class="${evs[0].i >= HI ? 'hi' : ''}"></i>` : ''}</span>`;
-  }).join('');
-  const inner = `<div class="mcal-h"><b>${cap(MONL[mo - 1])}${isPartial(k) ? '*' : ''}</b><span class="pill ${c}">${v == null ? '—' : sgn(v)}</span></div><div class="mcal-g">${WEEK.map((w) => `<span class="w">${w[0]}</span>`).join('')}${'<span></span>'.repeat(lead)}${cells}</div>`;
-  return tag === 'button' ? `<button type="button" class="mcal${k === SX.focusK ? ' on' : ''}" data-k="${k}">${inner}</button>` : `<div class="mcal">${inner}</div>`;
-}
-const CAL_KEY = '<div class="mcal-k"><span><i style="background:color-mix(in srgb,var(--accent) 60%,transparent)"></i>mais chuva</span><span><i style="box-shadow:inset 0 0 0 1.5px var(--accent)"></i>chuva forte</span><span><i style="width:5px;height:5px;background:var(--white);box-shadow:0 0 0 1.5px var(--accent)"></i>evento forte</span><span>traço = feriado</span></div>';
-function detailHtml(r, k) {
-  const v = r.v[k], c = vcls(v), w = r.wx[k], ev = r.ev[k], mdn = salesModel().med[k], meta = r.basis === 'meta';
-  const prev = k > 0 && !isPartial(k) ? r.vals[k - 1] : null;
-  const mom = Number.isFinite(prev) && prev > 0 && Number.isFinite(r.vals[k]) ? r.vals[k] / prev - 1 : null;
-  const rainLi = w ? `<li class="${r.rain[k] ? 'on' : ''}">${'<svg viewBox="0 0 24 24"><path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.24"/><path d="M16 14v6M8 14v6M12 16v6"/></svg>'}<span><b>${Math.round(w.rd)} dias de chuva</b> em ${esc(r.wxc.join(' e '))}${mdn.rd != null ? ` · ${w.rd - mdn.rd >= 0.5 ? `${Math.round(w.rd - mdn.rd)} acima` : w.rd - mdn.rd <= -0.5 ? `${Math.round(mdn.rd - w.rd)} abaixo` : 'igual'} da mediana da rede (${Math.round(mdn.rd)})` : ''} · <b>${Math.round(w.hd)} de chuva forte</b>${mdn.hd != null ? ` (rede ${Math.round(mdn.hd)})` : ''} · ${Math.round(w.mm)} mm${isPartial(k) ? ` até ${short(CUBO.asOf)}` : ''}.</span></li>`
-    : `<li><svg viewBox="0 0 24 24"><path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.24"/></svg><span>${r.wxc.length ? 'Lendo o registro do tempo deste mês…' : 'Mercado sem praça definida para o tempo.'}</span></li>`;
-  const hiEv = ev ? ev.filter((e) => e.i >= HI) : [];
-  const evLi = `<li class="${hiEv.length ? 'on' : ''}"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>${ev == null ? 'A agenda de eventos do radar começa em agosto de 2026.' : ev.length ? `<b>${plural(ev.length, 'evento', 'eventos')}</b> nas praças do mercado${hiEv.length ? `, ${hiEv.length} com pressão alta` : ''}<span class="evl">${ev.slice(0, 4).map((e) => `${esc(e.n)} · ${esc(range(e))} · ${e.i}`).join('<br>')}</span>` : 'Nenhum evento da agenda nas praças do mercado.'}</span></li>`;
-  let ahead = '';
-  if (isPartial(k)) {
-    const days = Array.from({ length: WX_DAYS }, (_, i) => addDays(TODAY, i)).filter((d) => d <= monthEnd(CUBO.months[k]));
-    const rd = days.filter((d) => r.wxc.some((cc) => rainy(wxGet(cc, d)))).length;
-    const evA = EV().filter((e) => r.m.cities.includes(e.p) && end(e) >= TODAY && e.d <= monthEnd(CUBO.months[k])).sort((a, b) => b.i - a.i);
-    ahead = `<li class="${rd >= days.length / 2 ? 'on' : ''}"><svg viewBox="0 0 24 24"><path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M19.07 4.93l-1.41 1.41M15.95 12.65a4 4 0 0 0-5.93-4.13"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/></svg><span>Até o fim do mês (previsão): <b>${plural(rd, 'dia', 'dias')} com chuva</b> em ${days.length} dias${evA.length ? ` · eventos: ${evA.slice(0, 2).map((e) => esc(e.n)).join(', ')}` : ''}.</span></li>`;
-  }
-  return `<div><p class="eyebrow">${esc(r.m.n)} · ${esc(cap(metricName()))}</p><h3>${esc(r.m.label)} · ${esc(monthName(k))}${isPartial(k) ? ` (até ${short(CUBO.asOf)})` : ''}</h3>
-    <span class="sx-verdict ${c}">${c === 'dn' ? `Abaixo ${meta ? 'da meta' : 'do esperado'}` : c === 'up' ? `Acima ${meta ? 'da meta' : 'do esperado'}` : c === 'eq' ? `Dentro ${meta ? 'da meta' : 'do esperado'}` : 'Sem comparação'}</span>
-    <div class="sx-nums"><div><b>${fmtM(r.vals[k])}</b><span>realizado</span></div><div><b>${fmtM(r.exp[k])}</b><span>${meta ? 'meta' : 'esperado pela rede'}</span></div><div class="${c}"><b>${sgn(v)}</b><span>${meta ? 'vs meta' : 'vs esperado'}</span></div>${mom != null ? `<div><b>${sgn(mom)}</b><span>vs ${MON[Number(CUBO.months[k - 1].slice(5)) - 1]}</span></div>` : ''}</div>
-    <ul class="sx-why">${rainLi}${evLi}${ahead}<li class="read"><span></span><span>${esc(readOf(r, k))}</span></li></ul></div>
-    <div>${monthCal(r, k)}${CAL_KEY}</div>`;
-}
-function renderSales() {
-  const has = Boolean(CUBO);
-  $('sxDrop').hidden = has; $('sxMain').hidden = !has; $('sxCtl').hidden = !has; $('sxFileInfo').hidden = !has;
-  if (!has) return;
-  const M = CUBO.months.length;
-  if (SX.focusK == null || SX.focusK >= M) SX.focusK = defaultFocus();
-  const k = SX.focusK;
-  $$('#sxMetric button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === SX.metric)));
-  $$('#sxView button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === SX.view)));
-  $$('#sxRegion button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === SX.region)));
-  $$('#sxSort button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === SX.sort)));
-  $('sxDown').setAttribute('aria-pressed', String(SX.onlyDown));
-  const model = salesModel(), rows = sxRows(model);
-  const meta = model.rows.some((r) => r.basis === 'meta');
-  // escolhe sozinho a maior queda do mês, para o painel nunca começar vazio
-  let sel = SX.sel != null ? model.rows.find((r) => r.idx === SX.sel) : null;
-  if (!sel || !rows.includes(sel)) sel = rows.slice().filter((r) => r.v[k] != null).sort((a, b) => a.v[k] - b.v[k])[0] || rows[0] || null;
-  SX.sel = sel ? sel.idx : null;
-  // leitura do mês em destaque
-  const valid = model.rows.filter((r) => r.v[k] != null), down = valid.filter((r) => vcls(r.v[k]) === 'dn');
-  const dr = down.filter((r) => r.rain[k]).length, de = down.filter((r) => r.evf[k]).length, both = down.filter((r) => r.rain[k] && r.evf[k]).length;
-  const worst = down.slice().sort((a, b) => a.v[k] - b.v[k])[0];
-  $('sxInsight').innerHTML = `Em <em>${esc(monthName(k))}</em>${isPartial(k) ? ` (até ${short(CUBO.asOf)})` : ''}, ${down.length} de ${valid.length} mercados ficaram abaixo ${meta ? 'da meta' : 'do esperado'} em ${esc(metricName())} <span>· ${dr} com chuva acima do normal, ${de} com evento forte${both ? `, ${both} com os dois` : ''}.${worst ? ` Maior queda: ${esc(worst.m.label)} (${sgn(worst.v[k])}).` : ''}</span>`;
-  const t = new Date(CUBO.at);
-  $('sxFileInfo').innerHTML = `<b>${esc(CUBO.file)}</b> · ${CUBO.markets.length} mercados · ${MON[Number(CUBO.months[0].slice(5)) - 1]} a ${MON[Number(CUBO.months[M - 1].slice(5)) - 1]} de ${CUBO.year}${isPartial(M - 1) ? `, ${MON[Number(CUBO.months[M - 1].slice(5)) - 1]} até ${short(CUBO.asOf)}` : ''} · lido em ${short(iso(t))} às ${hm(t)}. Fica só neste computador. <button type="button" data-sx="swap">Trocar arquivo</button> · <button type="button" data-sx="drop">Remover</button>`;
-  $('sxHeat').hidden = SX.view !== 'heat'; $('sxYear').hidden = SX.view !== 'cal';
-  if (SX.view === 'heat') {
-    const grid = $('sxGrid');
-    grid.style.setProperty('--n', M);
-    const T = SX.metric === 'tm' ? null : CUBO.total[SX.metric];
-    const head = `<div class="corner">${esc(metricName())} · ${meta ? 'vs meta' : 'vs esperado'}</div>` + CUBO.months.map((mk, i) => `<button type="button" class="mh${i === k ? ' on' : ''}" data-k="${i}" data-tip="${esc(`${cap(monthName(i))}${isPartial(i) ? ` (parcial, até ${short(CUBO.asOf)})` : ''}${T ? `\nRede: ${fmtM(T[i])}` : ''}\nClique para ler este mês`)}"><b>${MON[Number(mk.slice(5)) - 1]}${isPartial(i) ? '*' : ''}</b>${T ? `<span>${fmtM(T[i]).replace('R$ ', '')}</span>` : ''}</button>`).join('');
-    const body = rows.map((r) => `<button type="button" class="rn${sel === r ? ' on' : ''}" data-i="${r.idx}" title="${esc(r.m.n)}"><strong>${esc(r.m.label)}</strong><small>${SX.metric === 'tm' ? `média ${fmtM(r.vals.filter(Number.isFinite).reduce((s, x, _, a) => s + x / a.length, 0))}` : `${fmtM(r.tot)} no ano`}${r.wxc.length ? ` · ${esc(r.wxc.slice(0, 2).join(', '))}` : ''}</small></button>` + r.v.map((v, i) => {
-      const a = v == null ? 0 : Math.min(1, Math.abs(v) / 0.25);
-      return `<button type="button" class="hc ${vcls(v)}${sel === r && i === k ? ' sel' : ''}${i === k ? ' col' : ''}${isPartial(i) ? ' part' : ''}" style="--a:${a.toFixed(2)}" data-i="${r.idx}" data-k="${i}" data-tip="${esc(cellTip(r, i))}"><span>${v == null ? '—' : sgn(v)}</span>${r.rain[i] ? DROP : ''}${r.ev[i] && r.ev[i].length ? `<i class="ef${r.evf[i] ? ' hi' : ''}"></i>` : ''}</button>`;
-    }).join('')).join('');
-    grid.innerHTML = rows.length ? head + body : `<p class="empty" style="grid-column:1/-1">Nenhum mercado com estes filtros.</p>`;
-  } else if (sel) {
-    $('sxYear').innerHTML = `<div class="ycal-top"><select class="sel" id="sxPick" aria-label="Mercado">${rows.map((r) => `<option value="${r.idx}"${r === sel ? ' selected' : ''}>${esc(r.m.label)}</option>`).join('')}</select><span class="note">Cada dia: azul = chuva em ${esc(sel.wxc.join(' e ') || '—')}; ponto = evento nas praças; o número do mês = ${esc(metricName())} ${meta ? 'vs meta' : 'vs esperado'}. Clique num mês.</span></div><div class="ycal">${CUBO.months.map((_, i) => monthCal(sel, i, 'button')).join('')}</div>`;
-  } else $('sxYear').innerHTML = '<p class="empty">Nenhum mercado com estes filtros.</p>';
-  $('sxDetail').innerHTML = sel ? `<div class="sx-detail">${detailHtml(sel, k)}</div>` : '';
-  const loading = WX.histBusy > 0 || model.have < model.need;
-  $('sxNote').innerHTML = `${meta ? 'Comparação com a meta do arquivo.' : 'Esperado: o peso que cada mercado costuma ter no resto da rede (mediana dos outros meses), aplicado ao movimento do mês; férias e feriados nacionais, que mexem com todos, não viram queda.'} Chuva acima do normal: 3 dias de chuva ou 2 de chuva forte a mais que a mediana da rede no mês (registro Open-Meteo, praças de cada ponta). Evento forte: pressão ${HI}+ nas praças do mercado (agenda desde ago/2026).${loading ? ` <b>Lendo o registro do tempo: ${Math.min(model.have, model.need)} de ${model.need} praça-meses…</b>` : ''}`;
-  if (loading && !WX.histBusy) cuboWx();
-}
-$('sxFile').addEventListener('change', (e) => { loadCuboFile(e.target.files[0]); e.target.value = ''; });
-['dragenter', 'dragover'].forEach((t) => $('salesSec').addEventListener(t, (e) => { if (![...(e.dataTransfer && e.dataTransfer.types) || []].includes('Files')) return; e.preventDefault(); $('sxDrop').classList.add('over'); }));
-['dragleave', 'drop'].forEach((t) => $('salesSec').addEventListener(t, () => $('sxDrop').classList.remove('over')));
-$('salesSec').addEventListener('drop', (e) => { const f = e.dataTransfer && e.dataTransfer.files[0]; if (!f) return; e.preventDefault(); loadCuboFile(f); });
-$('sxFileInfo').addEventListener('click', (e) => {
-  const b = e.target.closest('[data-sx]');
-  if (!b) return;
-  if (b.dataset.sx === 'swap') $('sxFile').click();
-  else { CUBO = null; sxMemo = null; try { localStorage.removeItem('radar.cubo'); } catch {} softSwap([$('sxBody')], () => { renderSales(); refreshSlides(); }); toast('Dados do Cubo removidos deste computador.'); }
-});
-const sxSwap = () => softSwap([$('sxGrid'), $('sxYear'), $('sxDetail'), $('sxInsight')], renderSales);
-$('sxMetric').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (!b || b.dataset.v === SX.metric) return; SX.metric = b.dataset.v; store.set('sx.metric', SX.metric); sxSwap(); refreshSlides(); });
-$('sxView').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (!b || b.dataset.v === SX.view) return; SX.view = b.dataset.v; softSwap([$('sxHeat'), $('sxYear')], renderSales); });
-$('sxRegion').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (!b) return; SX.region = b.dataset.v; sxSwap(); });
-$('sxSort').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (!b) return; SX.sort = b.dataset.v; sxSwap(); });
-$('sxDown').addEventListener('click', () => { SX.onlyDown = !SX.onlyDown; sxSwap(); });
-let sxQT;
-$('sxQ').addEventListener('input', (e) => { clearTimeout(sxQT); sxQT = setTimeout(() => { SX.q = e.target.value; renderSales(); }, 140); });
-$('sxGrid').addEventListener('click', (e) => {
-  const c = e.target.closest('.hc[data-k]'), mh = e.target.closest('.mh[data-k]'), rn = e.target.closest('.rn[data-i]');
-  if (c) { SX.sel = Number(c.dataset.i); SX.focusK = Number(c.dataset.k); }
-  else if (mh) { SX.focusK = Number(mh.dataset.k); SX.sel = null; }
-  else if (rn) SX.sel = Number(rn.dataset.i);
-  else return;
-  hideTip();
-  softSwap([$('sxDetail'), $('sxInsight')], () => { renderSales(); refreshSlides(); });
-});
-$('sxYear').addEventListener('click', (e) => { const m = e.target.closest('.mcal[data-k]'); if (!m) return; SX.focusK = Number(m.dataset.k); softSwap([$('sxDetail'), $('sxInsight')], renderSales); });
-$('sxYear').addEventListener('change', (e) => { if (e.target.id === 'sxPick') { SX.sel = Number(e.target.value); softSwap([$('sxYear'), $('sxDetail')], renderSales); } });
-function salesSlide() {
-  if (!CUBO) return null;
-  const model = salesModel(), k = SX.focusK == null ? defaultFocus() : SX.focusK;
-  const down = model.rows.filter((r) => vcls(r.v[k]) === 'dn').sort((a, b) => a.v[k] - b.v[k]);
-  const meta = model.rows.some((r) => r.basis === 'meta');
-  return { key: 'vendas', label: `Vendas · ${monthName(k)}${isPartial(k) ? ' (parcial)' : ''}`, value: String(down.length), unit: down.length === 1 ? 'mercado abaixo' : 'mercados abaixo',
-    detail: down.length ? `${cap(metricName())} ${meta ? 'contra a meta' : 'contra o esperado pela rede'}: ${down.filter((r) => r.rain[k]).length} com chuva acima do normal, ${down.filter((r) => r.evf[k]).length} com evento forte. Maior queda: ${down[0].m.label} (${sgn(down[0].v[k])}).` : `Nenhum mercado abaixo ${meta ? 'da meta' : 'do esperado'} em ${monthName(k)}.`,
-    plot: 'vendas', rows: down.slice(0, 7).map((r) => ({ n: r.m.label, v: r.v[k], rain: r.rain[k], ev: r.evf[k] })) };
-}
-const sxMini = (list) => { const mx = Math.max(0.05, ...list.map((x) => Math.abs(x.v))); return list.length ? `<div class="sx-mini">${list.map((x) => `<div class="r" data-tip="${esc(`${x.n}: ${sgn(x.v)}${x.rain ? '\nChuva acima do normal' : ''}${x.ev ? '\nEvento forte nas praças' : ''}`)}"><span>${esc(x.n)}</span><i style="--w:${Math.round(Math.abs(x.v) / mx * 100)}%"></i><b>${sgn(x.v)}</b><em>${x.rain ? DROP : ''}${x.ev ? '<i class="ef"></i>' : ''}</em></div>`).join('')}</div>` : '<p class="empty">Nenhum mercado abaixo neste mês.</p>'; };
-
 /* ---------- 60 dias e janelas de pico ---------- */
-function drawStrip() {
-  const days = Array.from({ length: 60 }, (_, i) => addDays(TODAY, i));
-  $('strip').innerHTML = days.map((d, k) => {
-    const evs = evOn(d), peak = evs.length ? evs[0].i : 0;
-    return `<button type="button" data-d="${d}" class="${peak >= HI ? 'hi' : ''}${st.w === 'dia' && st.day === d ? ' sel' : ''}${d === TODAY ? ' today' : ''}" style="--k:${k};--h:${(peak / 100).toFixed(2)};--a:${Math.round(12 + peak * 0.5)}%" data-tip="${esc(`${label(d)}\n${evs.length ? `${plural(evs.length, 'evento', 'eventos')} · pressão ${peak}\n${evs[0].n}` : 'Sem evento marcado'}`)}" aria-label="${esc(label(d))}"></button>`;
-  }).join('');
-  $('stripFrom').textContent = label(days[0]);
-  $('stripTo').textContent = label(days[59]);
-}
 function renderWindows() {
   const top = windows().slice(0, 8);
   $('windows').innerHTML = top.length ? top.map((w, k) => `<button type="button" class="win rv" style="--i:${k}" data-from="${w.from}"><p class="eyebrow">${w.from === w.to ? label(w.from) : `${short(w.from)} a ${label(w.to)}`}</p><strong>${esc([...w.names].slice(0, 3).join(', '))}</strong><i style="--w:${w.peak}%"></i></button>`).join('')
@@ -2200,9 +1672,9 @@ function renderCal() {
     const d = addDays(start, k), evs = evOn(d), peak = evs.length ? evs[0].i : 0, r = wxGet(city, d);
     const showWx = r && (d < TODAY || inForecast(d));
     const faces = evs.slice(0, 4).map((e) => (e.img ? `<img src="${esc(e.img.t)}" alt="" loading="lazy" decoding="async">` : `<span>${esc(initials(e.n))}</span>`)).join('') + (evs.length > 4 ? `<span>+${evs.length - 4}</span>` : '');
-    return `<button type="button" class="cell-d rv${d.slice(0, 7) !== st.month ? ' out' : ''}${d === TODAY ? ' today' : ''}${d === st.calDay ? ' sel' : ''}" style="--i:${(k % 7) + Math.floor(k / 7)}" data-d="${d}" aria-label="${esc(label(d))}"${showWx ? ` data-tip="${esc(wxTip(city, d, r))}"` : ''}><span class="top-row"><span class="num">${asDate(d).getDate()}</span>${showWx ? `<span class="wxm">${wxIcon(r)}<span class="${isHot(r) ? 'hot' : ''}">${tC(r.hi)}</span></span>` : ''}</span>${evs.length ? `<div class="faces">${faces}</div><div class="nm">${esc(evs[0].n)}</div><span class="lv${peak >= HI ? ' hi' : ''}" style="--a:${Math.round(20 + peak * 0.5)}%"></span>` : ''}</button>`;
+    return `<button type="button" class="cell-d rv${d.slice(0, 7) !== st.month ? ' out' : ''}${d === TODAY ? ' today' : ''}${d === st.calDay ? ' sel' : ''}" style="--i:${(k % 7) + Math.floor(k / 7)}" data-d="${d}" aria-label="${esc(label(d))}"${showWx ? ` data-tip="${esc(wxTip(city, d, r))}"` : ''}><span class="top-row"><span class="num">${asDate(d).getDate()}</span>${showWx ? `<span class="wxm">${wxIcon(r)}<span class="${isHot(r) ? 'hot' : ''}">${tC(r.hi)}</span></span>` : ''}</span>${evs.length ? `<div class="nm">${esc(evs[0].n)}${evs.length > 1 ? ` <span class="more">+${evs.length - 1}</span>` : ""}</div><span class="lv${peak >= HI ? ' hi' : ''}" style="--a:${Math.round(20 + peak * 0.5)}%"></span>` : ''}</button>`;
   }).join('');
-  $('calNote').textContent = `Tempo em ${city} · Open-Meteo. Ícone azul = chuva; número em laranja = 32° ou mais.`;
+  $('calNote').textContent = `Hoje em cores; passe o mouse num dia para ver os outros. Tempo de ${city}.`;
   const d = st.calDay, evs = d ? evOn(d) : [];
   $('calDay').innerHTML = d ? `<div class="sub-h"><h3>${cap(label(d))}</h3><p>${evs.length ? plural(evs.length, 'evento', 'eventos') : 'Sem evento marcado'}</p></div><div class="day">${evs.map((e, k) => row(e, k)).join('')}</div>` : '';
   const last = addDays(start, 41);
@@ -2322,7 +1794,6 @@ function openHelp() {
     <h3>Pressão de demanda</h3><p>Pontuação de 0 a 100 que compara os eventos entre si: porte do local, número de datas, público de fora e soma com feriados. Indica onde olhar primeiro; não é previsão de vendas. Azul marca pressão alta (${HI} ou mais).</p>
     <h3>Sentinela</h3><p>Os números do momento passando sozinhos a cada 8 segundos: eventos de hoje, da semana, o próximo pico, a praça e o tipo em alta e o tempo da praça. Pause no botão ao lado dos números ou abra em tela cheia para a TV da sala.</p>
     <h3>Tempo</h3><ul><li><b>Previsão</b>: Open-Meteo, 14 dias à frente, por praça. Atualiza sozinha a cada 30 minutos enquanto a página está aberta${t ? ` (última leitura às ${hm(t)})` : ''}.</li><li><b>Registro</b>: Open-Meteo Historical Weather (reanálise ERA5) para os dias que já passaram: eventos encerrados, calendário e “Últimos 14 dias”.</li><li>Eventos fora do alcance da previsão mostram o mesmo período do ano passado como referência.</li><li>Evento nacional usa a praça escolhida nos filtros (ou ${esc(wxCity())}) como referência.</li></ul>
-    <h3>Vendas × tempo × eventos</h3><ul><li>Carregue o Excel do Cubo (receita e passageiros por mercado e mês). Ele é lido neste navegador e fica só neste computador; o site publicado não tem números de venda.</li><li><b>Esperado</b>: o peso que o mercado costuma ter no resto da rede (mediana dos outros meses) aplicado ao movimento do mês. Assim férias e feriados nacionais, que mexem com toda a rede, não aparecem como queda. Se o arquivo tiver meta, a comparação passa a ser com a meta.</li><li><b>Chuva acima do normal</b>: 3 dias de chuva (ou 2 de chuva forte) a mais que a mediana da rede no mesmo mês, nas praças de cada ponta do mercado.</li><li><b>Evento forte</b>: evento com pressão ${HI}+ nas praças do mercado. A agenda do radar começa em agosto de 2026.</li><li>Chuva e evento são pistas, não prova: o painel mostra o que aconteceu junto com a queda.</li></ul>
     <h3>Fontes</h3><p>Eventos: organizadores, bilheterias, prefeituras, federações e imprensa${DATA.atualizado ? `, atualizados em ${short(DATA.atualizado)}` : ''}. Datas, locais e públicos podem mudar: confira a fonte antes de uma decisão comercial.</p>
     <h3>Atalhos</h3><p>Esc fecha painéis · setas trocam os cartões da tela cheia · clique nos gráficos para abrir o dia.</p></div>`;
   openSide();
@@ -2365,12 +1836,30 @@ let toastT;
 function toast(msg) { $('toast').textContent = msg; $('toast').classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => $('toast').classList.remove('on'), 2800); }
 
 /* ---------- desenho e transições ---------- */
+const TABS = ['geral', 'demanda', 'previsao', 'agenda'];
+let tab = TABS.includes(store.get('tab')) ? store.get('tab') : 'geral';
+if (q.get('dia')) tab = 'agenda';
+function applyTab() {
+  $$('#tabs button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.tab === tab)));
+  $$('[data-tab]').forEach((el) => { if (el.closest('#tabs')) return; el.hidden = !el.dataset.tab.split(' ').includes(tab); });
+  if (tab === 'demanda') st.mode = 'cal';
+  if (tab === 'agenda') st.mode = 'lista';
+  if (st.mode === 'cal' && !st.calDay) st.calDay = TODAY;
+}
+function goTab(t) {
+  if (t === tab) return;
+  tab = t; store.set('tab', t);
+  const run = () => { applyTab(); paint(); scrollTo({ top: 0, behavior: 'instant' }); };
+  if (document.startViewTransition && !reduced() && !root.dataset.motion) { root.dataset.motion = 'theme'; document.startViewTransition(run).finished.finally(() => { delete root.dataset.motion; }); } else run();
+}
+$('tabs').addEventListener('click', (e) => { const b = e.target.closest('button[data-tab]'); if (b) goTab(b.dataset.tab); });
 function paint() {
+  applyTab();
   $$('#mode button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.m === st.mode)));
   $('viewList').hidden = st.mode !== 'lista';
   $('viewCal').hidden = st.mode !== 'cal';
   paintReceipt(); paintBubble(); paintLive();
-  refreshSlides(); paintKpis(); renderSpot(); renderLook(); renderWx(); renderSales(); drawStrip(); renderWindows();
+  refreshSlides(); paintKpis(); renderSpot(); renderWx(); renderWindows();
   if (st.mode === 'lista') renderList(); else renderCal();
   observeReveal();
 }
@@ -2412,13 +1901,7 @@ function observeReveal() {
 
 /* ---------- eventos da página ---------- */
 $('mode').addEventListener('click', (e) => { const b = e.target.closest('button[data-m]'); if (!b || b.dataset.m === st.mode) return; st.mode = b.dataset.m; store.set('mode', st.mode); if (st.mode === 'cal' && !st.calDay) st.calDay = TODAY; update(); });
-$('radarBy').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (!b || b.dataset.v === st.rBy) return; st.rBy = b.dataset.v; store.set('rby', st.rBy); softSwap([$('radar'), $('shares'), $('lookInsight')], renderLook); });
-$('radarMetric').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (!b || b.dataset.v === st.rMetric) return; st.rMetric = b.dataset.v; store.set('rmetric', st.rMetric); softSwap([$('radar'), $('shares'), $('lookInsight')], renderLook); });
-$('radar').addEventListener('click', (e) => { const t = e.target.closest('[data-k]'); if (t) pickAxis(st.rBy, t.dataset.k); });
-$('radar').addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('[data-k]')) { e.preventDefault(); pickAxis(st.rBy, e.target.closest('[data-k]').dataset.k); } });
-$('shares').addEventListener('click', (e) => { const t = e.target.closest('[data-k]'); if (t) pickAxis(st.rBy, t.dataset.k); });
-$('strip').addEventListener('click', (e) => { const b = e.target.closest('button[data-d]'); if (b) pickDay(b.dataset.d); });
-$('windows').addEventListener('click', (e) => { const b = e.target.closest('.win'); if (!b) return; st.mode = 'cal'; st.month = b.dataset.from.slice(0, 7); st.calDay = b.dataset.from; update(); setTimeout(() => $('agendaSec').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }), 120); });
+$('windows').addEventListener('click', (e) => { const b = e.target.closest('.win'); if (!b) return; st.month = b.dataset.from.slice(0, 7); st.calDay = b.dataset.from; tab = 'demanda'; store.set('tab', tab); update(); scrollTo({ top: 0, behavior: 'instant' }); });
 $('calPrev').addEventListener('click', () => { const [y, m] = st.month.split('-').map(Number); st.month = iso(new Date(y, m - 2, 1, 12)).slice(0, 7); renderCal(); });
 $('calNext').addEventListener('click', () => { const [y, m] = st.month.split('-').map(Number); st.month = iso(new Date(y, m, 1, 12)).slice(0, 7); renderCal(); });
 $('calToday').addEventListener('click', () => { st.month = TODAY.slice(0, 7); st.calDay = TODAY; renderCal(); });
@@ -2452,6 +1935,7 @@ addEventListener('message', (e) => {
   const m = e.data || {};
   if (m.radar === 'tema') { if (m.tema === 'claro') root.dataset.mode = 'light'; else delete root.dataset.mode; if (sentinel.slides.length) drawSlidePlot(sentinel.slides[sentinel.active], true); return; }
   if (m.radar !== 'dia') return;
+  tab = 'agenda';
   if (m.dia) { st.w = 'dia'; st.day = m.dia; st.month = m.dia.slice(0, 7); st.calDay = m.dia; st.mode = 'lista'; }
   if ('praca' in m) st.place = m.praca || '';
   update(true);
