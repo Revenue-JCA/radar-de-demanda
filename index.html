@@ -125,14 +125,14 @@ html.embed .top::before { background: none; backdrop-filter: none; -webkit-backd
 @keyframes bm-ring { 0% { opacity: 1; stroke-dashoffset: 0; } 24% { opacity: .1; stroke-dashoffset: 0; } 25% { opacity: 1; stroke-dashoffset: 1; } 72%, 100% { opacity: 1; stroke-dashoffset: 0; } }
 @keyframes bm-pupil { 0% { opacity: 1; transform: scale(1); } 24% { opacity: .1; transform: scale(.85); } 25% { opacity: 1; transform: scale(0); } 62%, 100% { opacity: 1; transform: scale(1); } }
 /* números que levam à lista */
-.go { cursor: pointer; }
-.kpi.go { border-radius: 0; transition: background .3s var(--ease); }
-.kpi.go:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
-.kpi.go:hover .v { color: var(--accent); }
-.kpi.go .d { transition: color .2s; }
-.kpi.go:hover .d { color: var(--white); }
-.sentinel-reading.go strong { transition: opacity .25s; }
-.sentinel-reading.go:hover strong { opacity: .82; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 10px; }
+.jump { cursor: pointer; }
+.kpi.jump { border-radius: 0; transition: background .3s var(--ease); }
+.kpi.jump:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.kpi.jump:hover .v { color: var(--accent); }
+.kpi.jump .d { transition: color .2s; }
+.kpi.jump:hover .d { color: var(--white); }
+.sentinel-reading.jump strong { transition: opacity .25s; }
+.sentinel-reading.jump:hover strong { opacity: .82; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 10px; }
 button.count { border: 0; background: none; padding: 0; font: inherit; color: var(--muted); }
 button.count:hover b { color: var(--accent); }
 .brand-word { display: inline-flex; align-items: baseline; gap: 9px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; font-size: 12px; white-space: nowrap; }
@@ -1343,7 +1343,7 @@ addEventListener('scroll', hideTip, { passive: true });
 function paintReceipt() {
   const list = EV().filter((e) => inWindow(e) && ok(e));
   const period = st.w === 'dia' ? cap(label(st.day)) : st.w === 'hoje' ? 'Hoje' : st.w === 'tudo' ? 'Toda a agenda' : `Próximos ${st.w} dias`;
-  $('receipt').innerHTML = `<button type="button" class="rc" data-open-filters title="Abrir os filtros"><b>${esc(period)}</b><span class="sepd">·</span><b>${esc(st.place || 'Todas as praças')}</b><span class="sepd">·</span><b>${esc(st.cat ? catName(st.cat) : 'Todos os tipos')}</b></button><button type="button" class="count go" data-go="${st.w === 'dia' ? '' : st.w}" title="Ver quais são"><b>${list.length}</b> ${list.length === 1 ? 'evento' : 'eventos'} ${esc(whenText())}</button>`;
+  $('receipt').innerHTML = `<button type="button" class="rc" data-open-filters title="Abrir os filtros"><b>${esc(period)}</b><span class="sepd">·</span><b>${esc(st.place || 'Todas as praças')}</b><span class="sepd">·</span><b>${esc(st.cat ? catName(st.cat) : 'Todos os tipos')}</b></button><button type="button" class="count jump" data-go="${st.w === 'dia' ? '' : st.w}" title="Ver quais são"><b>${list.length}</b> ${list.length === 1 ? 'evento' : 'eventos'} ${esc(whenText())}</button>`;
   $('countTag').innerHTML = `<b>${list.length}</b> ${list.length === 1 ? 'evento' : 'eventos'} ${esc(whenText())}`;
 }
 
@@ -1430,7 +1430,7 @@ function paintSentinel() {
   $('sentinelScope').textContent = scopeText();
   const go = { hoje: 'hoje', semana: '7', praca: 'tudo', tipo: 'tudo', pico: '30' }[sl.key] || '';
   const goF = sl.key === 'praca' && sl.S ? topOf(sl.S) : sl.key === 'tipo' && sl.S ? topOf(sl.S) : null;
-  paintOnce($('sentinelFrame'), `<div class="sentinel-reading${go ? ' go' : ''}" data-tone="${sl.tone || 'num'}"${go ? ` data-go="${go}"${goF ? ` data-${sl.key === 'praca' ? 'place' : 'cat'}="${esc(goF.k)}"` : ''} role="button" tabindex="0" title="Ver quais são"` : ''}><h1>${esc(sl.label)}</h1><strong>${esc(sl.value)}${sl.unit ? `<small>${esc(sl.unit)}</small>` : ''}</strong><p>${esc(sl.detail)}</p></div>`);
+  paintOnce($('sentinelFrame'), `<div class="sentinel-reading${go ? ' jump' : ''}" data-tone="${sl.tone || 'num'}"${go ? ` data-go="${go}"${goF ? ` data-${sl.key === 'praca' ? 'place' : 'cat'}="${esc(goF.k)}"` : ''} role="button" tabindex="0" title="Ver quais são"` : ''}><h1>${esc(sl.label)}</h1><strong>${esc(sl.value)}${sl.unit ? `<small>${esc(sl.unit)}</small>` : ''}</strong><p>${esc(sl.detail)}</p></div>`);
   $$('#sentinelControls [data-slide]').forEach((b, i) => b.setAttribute('aria-current', String(i === sentinel.active)));
   drawSlidePlot(sl);
 }
@@ -1583,7 +1583,7 @@ document.addEventListener('fullscreenchange', () => { if (theater.fullscreen && 
 function paintKpis() {
   const week = upcoming(7), month = upcoming(30), peak = windows()[0];
   const byP = shareBy('praca', 'i'), topP = topOf(byP), w = wxSummary(wxCity());
-  const k = (lbl, v, unit, d, cls = '', num = false, go = '') => `<div class="kpi ${cls}${go ? ' go' : ''}"${go ? ` data-go="${go}" role="button" tabindex="0" title="Ver quais são"` : ''}><p class="eyebrow">${esc(lbl)}</p><div class="v"${num ? ` data-n="${esc(v)}"` : ''} title="${esc(v)}">${num ? '0' : esc(v)}${unit ? `<small>${esc(unit)}</small>` : ''}</div><div class="d" title="${esc(d)}">${esc(d)}</div></div>`;
+  const k = (lbl, v, unit, d, cls = '', num = false, go = '') => `<div class="kpi ${cls}${go ? ' jump' : ''}"${go ? ` data-go="${go}" role="button" tabindex="0" title="Ver quais são"` : ''}><p class="eyebrow">${esc(lbl)}</p><div class="v"${num ? ` data-n="${esc(v)}"` : ''} title="${esc(v)}">${num ? '0' : esc(v)}${unit ? `<small>${esc(unit)}</small>` : ''}</div><div class="d" title="${esc(d)}">${esc(d)}</div></div>`;
   const html = [
     k('Próximos 7 dias', week.length, week.length === 1 ? 'evento' : 'eventos', `${week.filter((e) => e.i >= HI).length} com pressão alta · ver quais`, '', true, '7'),
     k('Próximos 30 dias', month.length, month.length === 1 ? 'evento' : 'eventos', `${plural(new Set(month.map((e) => e.p).filter((p) => p !== 'Nacional' && p !== 'Multi')).size, 'praça', 'praças')} com evento · ver quais`, '', true, '30'),
