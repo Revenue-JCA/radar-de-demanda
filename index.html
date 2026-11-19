@@ -141,6 +141,9 @@ html.embed #themeBtn { display: none; }
 .cell-d:not(.today) { filter: grayscale(1); opacity: .7; transition: filter .35s var(--ease), opacity .35s var(--ease), background .3s; }
 .cell-d:not(.today):hover, .cell-d.sel { filter: none; opacity: 1; }
 .cell-d.out:not(:hover) { opacity: .28; }
+.cell-d.past, .cell-d.past:hover, .cell-d.past.sel { filter: grayscale(1); opacity: .18; }
+.cell-d.past:hover { opacity: .3; }
+.dp-g button.past { opacity: .3; }
 
 /* recibo dos filtros */
 .filter-receipt { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 18px; margin-block: 18px 0; }
@@ -1672,7 +1675,7 @@ function renderCal() {
     const d = addDays(start, k), evs = evOn(d), peak = evs.length ? evs[0].i : 0, r = wxGet(city, d);
     const showWx = r && (d < TODAY || inForecast(d));
     const faces = evs.slice(0, 4).map((e) => (e.img ? `<img src="${esc(e.img.t)}" alt="" loading="lazy" decoding="async">` : `<span>${esc(initials(e.n))}</span>`)).join('') + (evs.length > 4 ? `<span>+${evs.length - 4}</span>` : '');
-    return `<button type="button" class="cell-d rv${d.slice(0, 7) !== st.month ? ' out' : ''}${d === TODAY ? ' today' : ''}${d === st.calDay ? ' sel' : ''}" style="--i:${(k % 7) + Math.floor(k / 7)}" data-d="${d}" aria-label="${esc(label(d))}"${showWx ? ` data-tip="${esc(wxTip(city, d, r))}"` : ''}><span class="top-row"><span class="num">${asDate(d).getDate()}</span>${showWx ? `<span class="wxm">${wxIcon(r)}<span class="${isHot(r) ? 'hot' : ''}">${tC(r.hi)}</span></span>` : ''}</span>${evs.length ? `<div class="nm">${esc(evs[0].n)}${evs.length > 1 ? ` <span class="more">+${evs.length - 1}</span>` : ""}</div><span class="lv${peak >= HI ? ' hi' : ''}" style="--a:${Math.round(20 + peak * 0.5)}%"></span>` : ''}</button>`;
+    return `<button type="button" class="cell-d rv${d.slice(0, 7) !== st.month ? ' out' : ''}${d < TODAY ? ' past' : ''}${d === TODAY ? ' today' : ''}${d === st.calDay ? ' sel' : ''}" style="--i:${(k % 7) + Math.floor(k / 7)}" data-d="${d}" aria-label="${esc(label(d))}"${showWx ? ` data-tip="${esc(wxTip(city, d, r))}"` : ''}><span class="top-row"><span class="num">${asDate(d).getDate()}</span>${showWx ? `<span class="wxm">${wxIcon(r)}<span class="${isHot(r) ? 'hot' : ''}">${tC(r.hi)}</span></span>` : ''}</span>${evs.length ? `<div class="nm">${esc(evs[0].n)}${evs.length > 1 ? ` <span class="more">+${evs.length - 1}</span>` : ""}</div><span class="lv${peak >= HI ? ' hi' : ''}" style="--a:${Math.round(20 + peak * 0.5)}%"></span>` : ''}</button>`;
   }).join('');
   $('calNote').textContent = `Hoje em cores; passe o mouse num dia para ver os outros. Tempo de ${city}.`;
   const d = st.calDay, evs = d ? evOn(d) : [];
@@ -1700,7 +1703,7 @@ function drawDp() {
   const [y, m] = dpMonth.split('-').map(Number);
   const first = new Date(y, m - 1, 1, 12), start = addDays(iso(first), -first.getDay());
   $('dp').innerHTML = `<div class="dp-h"><b>${cap(MONL[m - 1])} de ${y}</b><button type="button" data-nav="-1" aria-label="Mês anterior">${ICO.left}</button><button type="button" data-nav="1" aria-label="Próximo mês">${ICO.right}</button></div>
-    <div class="dp-g">${WEEK.map((w) => `<span>${w[0]}</span>`).join('')}${Array.from({ length: 42 }, (_, k) => { const d = addDays(start, k), evs = evOn(d), pk = evs.length ? evs[0].i : 0; return `<button type="button" data-d="${d}" class="${d.slice(0, 7) !== dpMonth ? 'out' : ''}${d === TODAY ? ' today' : ''}${st.w === 'dia' && d === st.day ? ' sel' : ''}" aria-label="${esc(label(d))}">${asDate(d).getDate()}${evs.length ? `<i class="${pk >= HI ? 'hi' : ''}"></i>` : ''}</button>`; }).join('')}</div>`;
+    <div class="dp-g">${WEEK.map((w) => `<span>${w[0]}</span>`).join('')}${Array.from({ length: 42 }, (_, k) => { const d = addDays(start, k), evs = evOn(d), pk = evs.length ? evs[0].i : 0; return `<button type="button" data-d="${d}" class="${d.slice(0, 7) !== dpMonth ? 'out' : ''}${d < TODAY ? ' past' : ''}${d === TODAY ? ' today' : ''}${st.w === 'dia' && d === st.day ? ' sel' : ''}" aria-label="${esc(label(d))}">${asDate(d).getDate()}${evs.length ? `<i class="${pk >= HI ? 'hi' : ''}"></i>` : ''}</button>`; }).join('')}</div>`;
 }
 function setBubble(open) {
   $('bar').classList.toggle('expanded', open);
