@@ -117,11 +117,13 @@ html.embed .top::before { background: none; backdrop-filter: none; -webkit-backd
 .bm-rays { --reach: 72%; -webkit-mask-image: radial-gradient(circle, #000 var(--reach), transparent calc(var(--reach) + 6%)); mask-image: radial-gradient(circle, #000 var(--reach), transparent calc(var(--reach) + 6%)); }
 .bm-ring { fill: none; stroke: url(#hs-blue); stroke-width: 3.2; stroke-dasharray: 1; stroke-dashoffset: 0; transform: rotate(-90deg); transform-origin: 100px 100px; }
 .bm-pupil { fill: url(#hs-blue); transform-origin: 100px 100px; }
-.brand-mark.play .bm-rays { animation: hl-reach 1.6s cubic-bezier(.22, 1, .36, 1) .35s both; }
-.brand-mark.play .bm-ring { animation: bm-draw 1.2s cubic-bezier(.65, 0, .35, 1) .05s both; }
-.brand-mark.play .bm-pupil { animation: bm-pupil 1s var(--ease) .2s both; }
-@keyframes bm-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-@keyframes bm-pupil { from { transform: scale(0); } to { transform: scale(1); } }
+.brand-mark.play .bm-rays { animation: bm-rays 2.3s cubic-bezier(.4, 0, .2, 1) both; }
+.brand-mark.play .bm-ring { animation: bm-ring 2.3s cubic-bezier(.4, 0, .2, 1) both; }
+.brand-mark.play .bm-pupil { animation: bm-pupil 2.3s cubic-bezier(.4, 0, .2, 1) both; }
+/* primeiro escurece devagar, depois se acende de novo como na abertura */
+@keyframes bm-rays { 0% { opacity: 1; --reach: 72%; } 24% { opacity: .08; --reach: 72%; } 25% { opacity: .08; --reach: 14%; } 32% { opacity: 1; --reach: 14%; } 92%, 100% { opacity: 1; --reach: 72%; } }
+@keyframes bm-ring { 0% { opacity: 1; stroke-dashoffset: 0; } 24% { opacity: .1; stroke-dashoffset: 0; } 25% { opacity: 1; stroke-dashoffset: 1; } 72%, 100% { opacity: 1; stroke-dashoffset: 0; } }
+@keyframes bm-pupil { 0% { opacity: 1; transform: scale(1); } 24% { opacity: .1; transform: scale(.85); } 25% { opacity: 1; transform: scale(0); } 62%, 100% { opacity: 1; transform: scale(1); } }
 /* números que levam à lista */
 .go { cursor: pointer; }
 .kpi.go { border-radius: 0; transition: background .3s var(--ease); }
@@ -1992,7 +1994,7 @@ document.querySelector('.brand-mark').addEventListener('mouseenter', (e) => {
   const b = e.currentTarget;
   if (b.classList.contains('play') || reduced()) return;
   b.classList.add('play');
-  setTimeout(() => b.classList.remove('play'), 2100);
+  setTimeout(() => b.classList.remove('play'), 2400);
 });
 
 /* ---------- abertura ---------- */
