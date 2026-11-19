@@ -603,6 +603,32 @@ html.embed .mod-head { top: 16px; }
 .xd-f { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding-top: 16px; border-top: 1px solid var(--line); }
 .xd-f .count { font-size: 12.5px; }
 
+/* busca */
+.sq-open kbd, .sq kbd { padding: 1px 6px; border: 1px solid var(--line-strong); border-radius: 6px; color: var(--faint); font: 500 10px var(--font); letter-spacing: .04em; }
+.sq-open:hover kbd { color: var(--page); border-color: color-mix(in srgb, var(--page) 40%, transparent); }
+.sq { width: min(640px, calc(100vw - 24px)); max-height: min(70vh, 620px); margin: 12vh auto auto; padding: 0; border: 1px solid var(--glass-line); border-radius: 26px; color: var(--white);
+  background: color-mix(in srgb, var(--card-solid) 94%, transparent); backdrop-filter: blur(28px) saturate(150%); -webkit-backdrop-filter: blur(28px) saturate(150%); box-shadow: var(--glass-shadow); overflow: hidden; }
+.sq[open] { display: flex; flex-direction: column; animation: theater-rise .35s var(--ease) both; }
+.sq::backdrop { background: rgba(0, 0, 0, .5); backdrop-filter: blur(4px); }
+.sq-in { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.sq-in .ico { width: 18px; height: 18px; color: var(--muted); }
+.sq-in input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; color: var(--white); font-size: 16px; }
+.sq-in input::-webkit-search-cancel-button { display: none; }
+.sq-list { overflow: auto; padding: 8px; scrollbar-width: thin; }
+.sq-g { padding: 10px 12px 4px; color: var(--faint); font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+.sq-it { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; gap: 12px; align-items: center; width: 100%; padding: 7px 12px 7px 8px; border: 0; border-radius: 999px; background: none; color: inherit; text-align: left; }
+.sq-it:hover, .sq-it.kb { background: color-mix(in srgb, var(--white) 6%, transparent); }
+.sq-it.kb { box-shadow: inset 0 0 0 1px var(--accent-line); }
+.sq-it .av { width: 38px; height: 38px; }
+.sq-it strong { display: block; font-size: 13.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sq-it strong mark { background: none; color: var(--accent); }
+.sq-it small { display: block; color: var(--muted); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sq-it.past { opacity: .5; }
+.sq-ic { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); }
+.sq-ic .ico { width: 16px; height: 16px; }
+.sq-empty { padding: 26px 16px; color: var(--muted); font-size: 13px; text-align: center; }
+@media (max-width: 700px) { .sq-open kbd { display: none; } }
+
 /* tooltip e aviso */
 #tip { position: fixed; z-index: 90; max-width: 320px; padding: 10px 20px; border: 1px solid var(--line-strong); border-radius: 22px; background: var(--panel); color: var(--white); font-size: 12px; line-height: 1.45; white-space: pre-line; pointer-events: none;
   clip-path: inset(0 0 100% 0); transform: translateY(4px); transition: clip-path .15s, transform .15s; }
@@ -744,6 +770,7 @@ html[data-motion="theme"] { view-transition-name: root; }
   <span class="brand" aria-label="Hélios · Radar de Demanda"><span class="brand-mark" aria-hidden="true"><svg class="bm-rays" viewBox="0 0 200 200"><use href="#hs-rays"/></svg><svg viewBox="0 0 200 200"><circle class="bm-ring" cx="100" cy="100" r="30" pathLength="1"/><circle class="bm-pupil" cx="100" cy="100" r="9"/></svg></span><span class="brand-word">Helios<small>Demanda</small></span></span>
   <div class="acts">
     <button type="button" class="live-st busy" id="live" hidden><i></i><span id="liveText">Lendo a previsão</span></button>
+    <button type="button" class="btn sq-open" id="searchBtn" title="Buscar artistas, eventos e praças (Ctrl+K)"><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="lbl">Buscar</span><kbd>Ctrl K</kbd></button>
     <button type="button" class="btn" id="exportBtn" title="Baixar uma imagem para mandar no grupo"><svg class="ico" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span class="lbl">Exportar</span></button>
     <button type="button" class="btn" id="themeBtn">Tema</button>
     <button type="button" class="btn round" id="helpBtn" title="Como ler o radar, de onde vêm os dados">?</button>
@@ -866,6 +893,10 @@ html[data-motion="theme"] { view-transition-name: root; }
     <div class="xd-sec"><b>Formato</b><div class="xd-row"><div class="seg" id="xdFmt"><button type="button" data-v="pptx">PowerPoint editável</button><button type="button" data-v="png">Imagem PNG</button></div><div class="seg" id="xdTheme" aria-label="Tema do PowerPoint"><button type="button" data-v="dark">Escuro</button><button type="button" data-v="light">Claro</button></div></div></div>
     <div class="xd-f"><span class="count" id="xdCount"></span><div class="xd-row"><button type="button" class="btn" data-xd="close">Cancelar</button><button type="button" class="btn pri" id="xdGo">Gerar</button></div></div>
   </form>
+</dialog>
+<dialog class="sq" id="sq" aria-label="Buscar">
+  <div class="sq-in"><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="sqInput" type="search" placeholder="Buscar artista, evento, praça ou tipo…" autocomplete="off" spellcheck="false" aria-controls="sqList"><kbd>Esc</kbd></div>
+  <div class="sq-list" id="sqList" role="listbox"></div>
 </dialog>
 <div class="toast" id="toast" role="status"></div>
 <div id="tip" role="tooltip"></div>
@@ -1910,6 +1941,68 @@ function openHelp() {
 }
 function openSide() { $('det').classList.add('on'); $('det').setAttribute('aria-hidden', 'false'); $('scrim').classList.add('on'); }
 function closeDetail() { $('det').classList.remove('on'); $('det').setAttribute('aria-hidden', 'true'); $('scrim').classList.remove('on'); detailNow = null; }
+
+/* ---------- busca: artistas, eventos, praças e tipos ---------- */
+const fold = (t) => String(t || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+let sqItems = [], sqKb = 0;
+function sqMark(name, qq) {
+  const i = fold(name).indexOf(qq);
+  return i < 0 || !qq ? esc(name) : `${esc(name.slice(0, i))}<mark>${esc(name.slice(i, i + qq.length))}</mark>${esc(name.slice(i + qq.length))}`;
+}
+function sqSearch() {
+  const raw = $('sqInput').value.trim(), qq = fold(raw);
+  const words = qq.split(/\s+/).filter(Boolean);
+  let html = '';
+  sqItems = [];
+  if (!qq) {
+    const next = EV().filter((e) => end(e) >= TODAY).sort((a, b) => b.i - a.i).slice(0, 6);
+    html += '<div class="sq-g">Mais fortes pela frente</div>' + next.map((e) => { sqItems.push({ t: 'ev', e }); return sqRow(e, ''); }).join('');
+  } else {
+    const hit = (e) => { const hay = fold(`${e.n} ${e.p} ${e.local || ''} ${catName(e.c)}`); return words.every((w) => hay.includes(w)); };
+    const score = (e) => (fold(e.n).startsWith(qq) ? 0 : fold(e.n).includes(qq) ? 1 : 2) * 1e4 + (end(e) < TODAY ? 5e3 : 0) + (e.d < TODAY ? 0 : diffDays(TODAY, e.d));
+    const evs = EV().filter(hit).sort((a, b) => score(a) - score(b)).slice(0, 10);
+    const places = [...new Set(EV().map((e) => e.p).filter((x) => x !== 'Nacional' && x !== 'Multi'))].filter((x) => fold(x).includes(qq)).slice(0, 3);
+    const cats = Object.entries(DATA.categorias).filter(([k, v]) => fold(v).includes(qq) && EV().some((e) => e.c === k)).slice(0, 2);
+    if (evs.length) html += `<div class="sq-g">Eventos · ${evs.length === 10 ? '10+' : evs.length}</div>` + evs.map((e) => { sqItems.push({ t: 'ev', e }); return sqRow(e, qq); }).join('');
+    if (places.length || cats.length) {
+      html += '<div class="sq-g">Filtrar a agenda</div>';
+      places.forEach((x) => { const n = EV().filter((e) => e.p === x && end(e) >= TODAY).length; sqItems.push({ t: 'place', v: x }); html += `<button type="button" class="sq-it" data-k="${sqItems.length - 1}"><span class="sq-ic"><svg class="ico" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span><span><strong>${sqMark(x, qq)}</strong><small>Praça · ${plural(n, 'evento', 'eventos')} pela frente</small></span><span></span></button>`; });
+      cats.forEach(([k, v]) => { const n = EV().filter((e) => e.c === k && end(e) >= TODAY).length; sqItems.push({ t: 'cat', v: k }); html += `<button type="button" class="sq-it" data-k="${sqItems.length - 1}"><span class="sq-ic"><svg class="ico" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h6"/></svg></span><span><strong>${sqMark(v, qq)}</strong><small>Tipo · ${plural(n, 'evento', 'eventos')} pela frente</small></span><span></span></button>`; });
+    }
+    if (!sqItems.length) html = `<p class="sq-empty">Nada encontrado para “${esc(raw)}”.</p>`;
+  }
+  $('sqList').innerHTML = html;
+  sqKb = 0; sqMarkKb();
+}
+function sqRow(e, qq) {
+  return `<button type="button" class="sq-it${end(e) < TODAY ? ' past' : ''}" data-k="${sqItems.length - 1}">${thumb(e)}<span><strong>${sqMark(e.n, qq)}</strong><small>${esc(range(e))} · ${esc(place(e))} · ${esc(catName(e.c))}${end(e) < TODAY ? ' · já passou' : ''}</small></span>${px(e.i)}</button>`;
+}
+function sqMarkKb() { $$('#sqList .sq-it').forEach((b, i) => b.classList.toggle('kb', i === sqKb)); const b = $$('#sqList .sq-it')[sqKb]; if (b) b.scrollIntoView({ block: 'nearest' }); }
+function sqPick(i) {
+  const it = sqItems[i];
+  if (!it) return;
+  $('sq').close();
+  if (it.t === 'ev') { openDetail(it.e); return; } // direto no evento, sem mexer nos filtros
+  if (it.t === 'place') { st.place = it.v; store.set('place', st.place); st.cat = ''; }
+  if (it.t === 'cat') st.cat = it.v;
+  buildIndex(); winCache = null;
+  openAgenda('tudo');
+}
+function openSearch() { $('sqInput').value = ''; $('sq').showModal(); sqSearch(); $('sqInput').focus(); }
+$('searchBtn').addEventListener('click', openSearch);
+$('sqInput').addEventListener('input', sqSearch);
+$('sqList').addEventListener('click', (e) => { const b = e.target.closest('.sq-it'); if (b) sqPick(Number(b.dataset.k)); });
+$('sq').addEventListener('click', (e) => { if (e.target === $('sq')) $('sq').close(); });
+$('sqInput').addEventListener('keydown', (e) => {
+  const n = $$('#sqList .sq-it').length;
+  if (e.key === 'ArrowDown') { sqKb = Math.min(n - 1, sqKb + 1); sqMarkKb(); e.preventDefault(); }
+  if (e.key === 'ArrowUp') { sqKb = Math.max(0, sqKb - 1); sqMarkKb(); e.preventDefault(); }
+  if (e.key === 'Enter') { sqPick(sqKb); e.preventDefault(); }
+});
+document.addEventListener('keydown', (e) => {
+  const typing = /input|textarea|select/i.test((document.activeElement || {}).tagName || '');
+  if ((e.key === 'k' && (e.ctrlKey || e.metaKey)) || (e.key === '/' && !typing)) { e.preventDefault(); if (!$('sq').open) openSearch(); }
+});
 
 /* ---------- exportar: escolha do que entra + PowerPoint editável ---------- */
 const XD = { per: '7', from: '', to: '', places: new Set(), fmt: 'pptx', theme: 'dark' };
