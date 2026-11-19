@@ -111,8 +111,29 @@ html.embed .helios-loader { display: none; }
 html.embed .top { position: static; }
 html.embed .top::before { background: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
 .brand { display: inline-flex; align-items: center; gap: 12px; min-width: 0; color: inherit; text-decoration: none; }
-.brand-sun { width: 30px; height: 30px; flex: none; overflow: visible; transition: transform 1.4s var(--ease); }
-.brand:hover .brand-sun { transform: rotate(22.5deg); }
+.brand { cursor: default; }
+.brand-mark { position: relative; flex: none; width: 30px; height: 30px; }
+.brand-mark svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.bm-rays { --reach: 72%; -webkit-mask-image: radial-gradient(circle, #000 var(--reach), transparent calc(var(--reach) + 6%)); mask-image: radial-gradient(circle, #000 var(--reach), transparent calc(var(--reach) + 6%)); }
+.bm-ring { fill: none; stroke: url(#hs-blue); stroke-width: 3.2; stroke-dasharray: 1; stroke-dashoffset: 0; transform: rotate(-90deg); transform-origin: 100px 100px; }
+.bm-pupil { fill: url(#hs-blue); transform-origin: 100px 100px; }
+.brand.play .bm-rays { animation: hl-reach 1.6s cubic-bezier(.22, 1, .36, 1) .35s both; }
+.brand.play .bm-ring { animation: bm-draw 1.2s cubic-bezier(.65, 0, .35, 1) .05s both; }
+.brand.play .bm-pupil { animation: bm-pupil 1s var(--ease) .2s both; }
+.brand.play .brand-word { animation: hl-word 1.3s var(--ease) .45s both; }
+@keyframes bm-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes bm-pupil { from { transform: scale(0); } to { transform: scale(1); } }
+/* números que levam à lista */
+.go { cursor: pointer; }
+.kpi.go { border-radius: 0; transition: background .3s var(--ease); }
+.kpi.go:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.kpi.go:hover .v { color: var(--accent); }
+.kpi.go .d { transition: color .2s; }
+.kpi.go:hover .d { color: var(--white); }
+.sentinel-reading.go strong { transition: opacity .25s; }
+.sentinel-reading.go:hover strong { opacity: .82; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 10px; }
+button.count { border: 0; background: none; padding: 0; font: inherit; color: var(--muted); }
+button.count:hover b { color: var(--accent); }
 .brand-word { display: inline-flex; align-items: baseline; gap: 9px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; font-size: 12px; white-space: nowrap; }
 .brand-word small { color: var(--muted); font-weight: 500; letter-spacing: .2em; font-size: 10.5px; }
 .acts { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
@@ -658,7 +679,7 @@ html[data-motion="theme"] { view-transition-name: root; }
   :root { --pad: 16px; }
   .top { flex-wrap: nowrap; min-height: 56px; padding-block: 8px; }
   .brand { gap: 8px; }
-  .brand-sun { width: 26px; height: 26px; }
+  .brand-mark { width: 26px; height: 26px; }
   .brand-word { letter-spacing: .26em; font-size: 11px; }
   .brand-word small { display: none; }
   .acts { flex-wrap: nowrap; gap: 6px; }
@@ -686,7 +707,7 @@ html[data-motion="theme"] { view-transition-name: root; }
 <div class="helios-loader" id="loader" role="status" aria-label="Carregando o Hélios · Radar de Demanda"><div class="hl-mark" aria-hidden="true"><svg class="hl-rays" viewBox="0 0 200 200"><use href="#hs-rays"/></svg><svg viewBox="0 0 200 200"><circle class="hl-ring" cx="100" cy="100" r="30" pathLength="1"/><circle class="hl-pupil" cx="100" cy="100" r="9"/></svg></div><p class="hl-word">HELIOS</p><span class="hl-line" aria-hidden="true"><i></i></span><p class="hl-label">Lendo a demanda</p></div>
 
 <header class="wrap top" id="top">
-  <span class="brand" aria-label="Hélios · Radar de Demanda"><svg class="brand-sun" viewBox="0 0 200 200" aria-hidden="true"><use href="#helios-sun"/></svg><span class="brand-word">Helios<small>Demanda</small></span></span>
+  <span class="brand" aria-label="Hélios · Radar de Demanda"><span class="brand-mark" aria-hidden="true"><svg class="bm-rays" viewBox="0 0 200 200"><use href="#hs-rays"/></svg><svg viewBox="0 0 200 200"><circle class="bm-ring" cx="100" cy="100" r="30" pathLength="1"/><circle class="bm-pupil" cx="100" cy="100" r="9"/></svg></span><span class="brand-word">Helios<small>Demanda</small></span></span>
   <div class="acts">
     <button type="button" class="live-st busy" id="live" hidden><i></i><span id="liveText">Lendo a previsão</span></button>
     <button type="button" class="btn" id="exportBtn" title="Baixar uma imagem para mandar no grupo"><svg class="ico" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg><span class="lbl">Exportar</span></button>
@@ -1313,7 +1334,7 @@ addEventListener('scroll', hideTip, { passive: true });
 function paintReceipt() {
   const list = EV().filter((e) => inWindow(e) && ok(e));
   const period = st.w === 'dia' ? cap(label(st.day)) : st.w === 'hoje' ? 'Hoje' : st.w === 'tudo' ? 'Toda a agenda' : `Próximos ${st.w} dias`;
-  $('receipt').innerHTML = `<button type="button" class="rc" data-open-filters title="Abrir os filtros"><b>${esc(period)}</b><span class="sepd">·</span><b>${esc(st.place || 'Todas as praças')}</b><span class="sepd">·</span><b>${esc(st.cat ? catName(st.cat) : 'Todos os tipos')}</b></button><span class="count"><b>${list.length}</b> ${list.length === 1 ? 'evento' : 'eventos'} ${esc(whenText())}</span>`;
+  $('receipt').innerHTML = `<button type="button" class="rc" data-open-filters title="Abrir os filtros"><b>${esc(period)}</b><span class="sepd">·</span><b>${esc(st.place || 'Todas as praças')}</b><span class="sepd">·</span><b>${esc(st.cat ? catName(st.cat) : 'Todos os tipos')}</b></button><button type="button" class="count go" data-go="${st.w === 'dia' ? '' : st.w}" title="Ver quais são"><b>${list.length}</b> ${list.length === 1 ? 'evento' : 'eventos'} ${esc(whenText())}</button>`;
   $('countTag').innerHTML = `<b>${list.length}</b> ${list.length === 1 ? 'evento' : 'eventos'} ${esc(whenText())}`;
 }
 
@@ -1398,7 +1419,9 @@ function paintSentinel() {
   const sl = sentinel.slides[sentinel.active];
   if (!sl) return;
   $('sentinelScope').textContent = scopeText();
-  paintOnce($('sentinelFrame'), `<div class="sentinel-reading" data-tone="${sl.tone || 'num'}"><h1>${esc(sl.label)}</h1><strong>${esc(sl.value)}${sl.unit ? `<small>${esc(sl.unit)}</small>` : ''}</strong><p>${esc(sl.detail)}</p></div>`);
+  const go = { hoje: 'hoje', semana: '7', praca: 'tudo', tipo: 'tudo', pico: '30' }[sl.key] || '';
+  const goF = sl.key === 'praca' && sl.S ? topOf(sl.S) : sl.key === 'tipo' && sl.S ? topOf(sl.S) : null;
+  paintOnce($('sentinelFrame'), `<div class="sentinel-reading${go ? ' go' : ''}" data-tone="${sl.tone || 'num'}"${go ? ` data-go="${go}"${goF ? ` data-${sl.key === 'praca' ? 'place' : 'cat'}="${esc(goF.k)}"` : ''} role="button" tabindex="0" title="Ver quais são"` : ''}><h1>${esc(sl.label)}</h1><strong>${esc(sl.value)}${sl.unit ? `<small>${esc(sl.unit)}</small>` : ''}</strong><p>${esc(sl.detail)}</p></div>`);
   $$('#sentinelControls [data-slide]').forEach((b, i) => b.setAttribute('aria-current', String(i === sentinel.active)));
   drawSlidePlot(sl);
 }
@@ -1551,10 +1574,10 @@ document.addEventListener('fullscreenchange', () => { if (theater.fullscreen && 
 function paintKpis() {
   const week = upcoming(7), month = upcoming(30), peak = windows()[0];
   const byP = shareBy('praca', 'i'), topP = topOf(byP), w = wxSummary(wxCity());
-  const k = (lbl, v, unit, d, cls = '', num = false) => `<div class="kpi ${cls}"><p class="eyebrow">${esc(lbl)}</p><div class="v"${num ? ` data-n="${esc(v)}"` : ''} title="${esc(v)}">${num ? '0' : esc(v)}${unit ? `<small>${esc(unit)}</small>` : ''}</div><div class="d" title="${esc(d)}">${esc(d)}</div></div>`;
+  const k = (lbl, v, unit, d, cls = '', num = false, go = '') => `<div class="kpi ${cls}${go ? ' go' : ''}"${go ? ` data-go="${go}" role="button" tabindex="0" title="Ver quais são"` : ''}><p class="eyebrow">${esc(lbl)}</p><div class="v"${num ? ` data-n="${esc(v)}"` : ''} title="${esc(v)}">${num ? '0' : esc(v)}${unit ? `<small>${esc(unit)}</small>` : ''}</div><div class="d" title="${esc(d)}">${esc(d)}</div></div>`;
   const html = [
-    k('Próximos 7 dias', week.length, week.length === 1 ? 'evento' : 'eventos', `${week.filter((e) => e.i >= HI).length} com pressão alta`, '', true),
-    k('Próximos 30 dias', month.length, month.length === 1 ? 'evento' : 'eventos', `${plural(new Set(month.map((e) => e.p).filter((p) => p !== 'Nacional' && p !== 'Multi')).size, 'praça', 'praças')} com evento`, '', true),
+    k('Próximos 7 dias', week.length, week.length === 1 ? 'evento' : 'eventos', `${week.filter((e) => e.i >= HI).length} com pressão alta · ver quais`, '', true, '7'),
+    k('Próximos 30 dias', month.length, month.length === 1 ? 'evento' : 'eventos', `${plural(new Set(month.map((e) => e.p).filter((p) => p !== 'Nacional' && p !== 'Multi')).size, 'praça', 'praças')} com evento · ver quais`, '', true, '30'),
     k('Próximo pico', peak ? short(peak.from) : '—', '', peak ? [...peak.names][0] || '' : 'sem pico à vista'),
     k('Praça em alta', topP ? topP.label : '—', '', `pressão somada · 90 dias${st.place ? ' · entre todas' : ''}`),
     w.ok ? k(`Chuva em ${w.city}`, w.rain, w.rain === 1 ? 'dia' : 'dias', `nos próximos 14 dias · máx. ${tC(w.max)}`, 'acc', true) : k(`Tempo em ${w.city}`, '—', '', w.text, 'acc'),
@@ -1576,6 +1599,16 @@ function pickAxis(by, k) {
   if (st.w === 'hoje') st.w = '30';
   update(true);
 }
+function openAgenda(w, el) {
+  if (el && el.dataset.place) { st.place = el.dataset.place; store.set('place', st.place); st.cat = ''; buildIndex(); winCache = null; }
+  if (el && el.dataset.cat) { st.cat = el.dataset.cat; buildIndex(); winCache = null; }
+  if (w) { st.w = w; store.set('w', w); }
+  tab = 'agenda'; store.set('tab', tab); st.mode = 'lista';
+  update();
+  setTimeout(() => { const el = $('list'); const y = el.getBoundingClientRect().top + scrollY - 96; scrollTo({ top: y, behavior: reduced() ? 'auto' : 'smooth' }); }, 140);
+}
+document.addEventListener('click', (e) => { const g = e.target.closest('[data-go]'); if (g) { e.stopPropagation(); openAgenda(g.dataset.go, g); } }, true);
+document.addEventListener('keydown', (e) => { if ((e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('[data-go]')) { e.preventDefault(); openAgenda(e.target.closest('[data-go]').dataset.go); } });
 function pickDay(d) { st.w = 'dia'; st.day = d; st.calDay = d; st.month = d.slice(0, 7); if (tab !== 'agenda') { tab = 'agenda'; store.set('tab', tab); } update(); setTimeout(() => $('agendaSec').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }), 120); }
 
 /* ---------- tempo nas praças ---------- */
@@ -1954,6 +1987,14 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 addEventListener('online', () => { if (Date.now() - WX.at > 5 * 60e3) loadForecast(); });
 let resizeT;
 addEventListener('resize', () => { clearTimeout(resizeT); resizeT = setTimeout(() => { const sl = sentinel.slides[sentinel.active]; if (sl && sl.plot !== 'radar') drawSlidePlot(sl, true); }, 200); }, { passive: true });
+
+/* ---------- logo: a abertura de novo ao passar o mouse ---------- */
+document.querySelector('.brand').addEventListener('mouseenter', (e) => {
+  const b = e.currentTarget;
+  if (b.classList.contains('play') || reduced()) return;
+  b.classList.add('play');
+  setTimeout(() => b.classList.remove('play'), 2100);
+});
 
 /* ---------- abertura ---------- */
 (function favicon() { const l = document.createElement('link'); l.rel = 'icon'; l.href = sunDataURI(); document.head.appendChild(l); })();
