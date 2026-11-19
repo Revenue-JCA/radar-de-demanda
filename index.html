@@ -512,6 +512,14 @@ html.embed .mod-head { top: 16px; }
 .wxd.hist { border-style: dashed; }
 .wxnote { margin: 10px 0 0; color: var(--muted); font-size: 12.5px; line-height: 1.55; }
 .wxnote b { color: var(--white); font-weight: 600; }
+.wxall { display: grid; gap: 2px 4px; margin-top: 10px; align-items: center; }
+.wxall .h { padding-bottom: 6px; color: var(--muted); font-size: 10px; letter-spacing: .1em; text-align: center; text-transform: uppercase; }
+.wxall .c { padding: 6px 0; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wxall .v { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 6px 0; border-top: 1px solid var(--line); font-size: 12px; }
+.wxall .v .wi { width: 14px; height: 14px; }
+.wxall .v b { font-weight: 600; }
+.wxall .v em { color: var(--accent); font-size: 10px; font-style: normal; }
+.wxall .v.na { color: var(--faint); }
 .tabs { display: flex; gap: 2px; height: 36px; margin-top: 18px; padding: 3px; border: 1px solid var(--line-strong); border-radius: 999px; }
 .tabs button { flex: 1; border: 0; border-radius: 999px; background: none; color: var(--muted); font-size: 12px; transition: background .2s, color .2s; }
 .tabs button:hover:not([aria-pressed="true"]) { color: var(--white); }
@@ -1763,7 +1771,27 @@ function wxDays(e) {
   for (let d = e.d, n = 0; d <= end(e) && n < 400; d = addDays(d, 1), n++) days.push(d);
   return days;
 }
+// Feriado nacional: o Brasil inteiro viaja, então o tempo vem de todas as praças.
+const isNationalHoliday = (e) => e.c === 'feriado' && (e.p === 'Nacional' || e.p === 'Multi');
+function paintDetailWxAll(e) {
+  const box = $('detWx');
+  if (!box || detailNow !== e) return;
+  const cities = wxCityList();
+  const days = wxDays(e).slice(0, 5);
+  const future = days[0] > addDays(TODAY, WX_DAYS - 1);
+  const past = end(e) < TODAY;
+  const src = (d) => (future ? lastYear(d) : d);
+  const head = `<div class="wxbox-h"><b>Tempo nas praças</b><span>${future ? `previsão abre em ${label(addDays(days[0], -(WX_DAYS - 1)))} · abaixo, o mesmo período do ano passado` : past ? 'registro histórico' : 'previsão Open-Meteo'}</span></div>`;
+  const cols = `grid-template-columns: minmax(96px, 1.2fr) repeat(${days.length}, minmax(52px, 1fr))`;
+  const hdr = `<span></span>${days.map((d) => `<span class="h">${WEEK[asDate(d).getDay()]} ${asDate(d).getDate()}</span>`).join('')}`;
+  const rows = cities.map((c) => `<span class="c">${esc(c)}</span>${days.map((d) => { const r = wxGet(c, src(d)); return r ? `<span class="v${d === TODAY ? ' now' : ''}" data-tip="${esc(wxTip(c, src(d), r))}">${wxIcon(r)}<b class="${isHot(r) ? 'hot' : ''}">${tC(r.hi)}</b>${rainy(r) ? `<em>${mmF(r.mm)}</em>` : ''}</span>` : '<span class="v na">—</span>'; }).join('')}`).join('');
+  const recs = cities.flatMap((c) => days.map((d) => wxGet(c, src(d)))).filter(Boolean);
+  const wet = cities.filter((c) => days.some((d) => rainy(wxGet(c, src(d)))));
+  const note = recs.length ? `${wet.length ? `Chuva ${future ? 'no ano passado ' : ''}em <b>${wet.length} de ${cities.length} praças</b>: ${wet.slice(0, 4).map(esc).join(', ')}${wet.length > 4 ? ' e outras' : ''}.` : `<b>Sem chuva relevante</b> ${future ? 'no ano passado ' : ''}nas praças.`} ${hiRange(recs)}.` : 'Lendo o tempo das praças…';
+  box.innerHTML = `${head}<div class="wxall" style="${cols}">${hdr}${rows}</div><p class="wxnote">${note}</p>`;
+}
 function paintDetailWx(e) {
+  if (isNationalHoliday(e)) { paintDetailWxAll(e); return; }
   const box = $('detWx');
   if (!box || detailNow !== e) return;
   const city = evCity(e), named = hasCity(e.p);
@@ -1817,9 +1845,9 @@ function openDetail(e) {
   $('det').querySelector('.tabs').addEventListener('click', (ev) => { const b = ev.target.closest('button[data-t]'); if (b) show(b.dataset.t); });
   $('det').querySelector('[data-export-one]').addEventListener('click', () => exportPng([e], true));
   paintDetailWx(e);
-  const city = evCity(e);
-  if (e.d < TODAY) ensureHist([city], e.d, end(e));
-  if (e.d > addDays(TODAY, WX_DAYS - 1)) { const days = wxDays(e).slice(0, 14); ensureHist([city], lastYear(days[0]), lastYear(days[days.length - 1])); }
+  const wxc = isNationalHoliday(e) ? wxCityList() : [evCity(e)];
+  if (e.d < TODAY) ensureHist(wxc, e.d, end(e));
+  if (e.d > addDays(TODAY, WX_DAYS - 1)) { const days = wxDays(e).slice(0, isNationalHoliday(e) ? 5 : 14); ensureHist(wxc, lastYear(days[0]), lastYear(days[days.length - 1])); }
   openSide();
   requestAnimationFrame(() => requestAnimationFrame(() => { const v = $('det').querySelector('.val'); if (v) v.style.strokeDashoffset = 100 - e.i; }));
 }
