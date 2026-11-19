@@ -2079,7 +2079,7 @@ async function exportPptx() {
       for (let i = 0; i < part.length; i++) {
         const e = part[i], x = 0.5 + (i % 2) * 6.25, y = 2.15 + Math.floor(i / 2) * 2.4;
         const Q = 1.75; // foto quadrada, 1:1
-        const ph = e.img ? await squarePhoto(e.img.f) : null;
+        const ph = e.img ? await squarePhoto(e.img.q || e.img.f) : null; // q = versão quadrada própria para o PowerPoint, quando houver
         if (ph) s.addImage({ data: ph, x, y, w: Q, h: Q });
         else s.addShape(pptx.ShapeType.roundRect, { x, y, w: Q, h: Q, fill: { color: C.panel }, line: { color: C.line, width: 0.75 }, rectRadius: 0.2 });
         const tx = x + Q + 0.25, tw = 6.0 - Q - 0.25;
