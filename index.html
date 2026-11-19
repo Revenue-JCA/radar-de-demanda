@@ -863,7 +863,7 @@ html[data-motion="theme"] { view-transition-name: root; }
       <label class="xd-check"><input type="checkbox" value="previsao" checked><span>Previsão do tempo<small>14 dias por praça, com gráfico</small></span></label>
       <label class="xd-check"><input type="checkbox" value="feriados" checked><span>Feriados<small>tempo de todas as praças</small></span></label>
     </div></div>
-    <div class="xd-sec"><b>Formato</b><div class="xd-row"><div class="seg" id="xdFmt"><button type="button" data-v="pptx">PowerPoint editável</button><button type="button" data-v="png">Imagem PNG</button></div></div></div>
+    <div class="xd-sec"><b>Formato</b><div class="xd-row"><div class="seg" id="xdFmt"><button type="button" data-v="pptx">PowerPoint editável</button><button type="button" data-v="png">Imagem PNG</button></div><div class="seg" id="xdTheme" aria-label="Tema do PowerPoint"><button type="button" data-v="dark">Escuro</button><button type="button" data-v="light">Claro</button></div></div></div>
     <div class="xd-f"><span class="count" id="xdCount"></span><div class="xd-row"><button type="button" class="btn" data-xd="close">Cancelar</button><button type="button" class="btn pri" id="xdGo">Gerar</button></div></div>
   </form>
 </dialog>
@@ -1912,7 +1912,7 @@ function openSide() { $('det').classList.add('on'); $('det').setAttribute('aria-
 function closeDetail() { $('det').classList.remove('on'); $('det').setAttribute('aria-hidden', 'true'); $('scrim').classList.remove('on'); detailNow = null; }
 
 /* ---------- exportar: escolha do que entra + PowerPoint editável ---------- */
-const XD = { per: '7', from: '', to: '', places: new Set(), fmt: 'pptx' };
+const XD = { per: '7', from: '', to: '', places: new Set(), fmt: 'pptx', theme: 'dark' };
 function xdRange() {
   const t = asDate(TODAY), y = t.getFullYear(), m = t.getMonth();
   if (XD.per === 'mes') return [TODAY, iso(new Date(y, m + 1, 0, 12))];
@@ -1928,6 +1928,8 @@ const periodName = () => { const [a, b] = xdRange(); return a === b ? label(a) :
 function paintXd() {
   $$('#xdPer button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === XD.per)));
   $$('#xdFmt button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === XD.fmt)));
+  $$('#xdTheme button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === XD.theme)));
+  $('xdTheme').hidden = XD.fmt !== 'pptx';
   $('xdDates').hidden = XD.per !== 'custom';
   $('xdPlaces').innerHTML = `<button type="button" class="chip" data-p="" aria-pressed="${!XD.places.size}">Todas</button>` + wxCities().map((c) => `<button type="button" class="chip" data-p="${esc(c)}" aria-pressed="${XD.places.has(c)}">${esc(c)}</button>`).join('');
   const n = xdEvents().length;
@@ -1935,11 +1937,13 @@ function paintXd() {
 }
 function openExport() {
   XD.places = new Set(st.place ? [st.place] : []);
+  XD.theme = root.dataset.mode === 'light' ? 'light' : 'dark'; // começa no tema da tela; dá para trocar
   if (!XD.from) { XD.from = TODAY; XD.to = addDays(TODAY, 30); $('xdFrom').value = XD.from; $('xdTo').value = XD.to; }
   paintXd();
   $('xd').showModal();
 }
 $('xdPer').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (b) { XD.per = b.dataset.v; paintXd(); } });
+$('xdTheme').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (b) { XD.theme = b.dataset.v; paintXd(); } });
 $('xdFmt').addEventListener('click', (e) => { const b = e.target.closest('button[data-v]'); if (b) { XD.fmt = b.dataset.v; paintXd(); } });
 $('xdPlaces').addEventListener('click', (e) => { const b = e.target.closest('button[data-p]'); if (!b) return; if (!b.dataset.p) XD.places.clear(); else if (XD.places.has(b.dataset.p)) XD.places.delete(b.dataset.p); else XD.places.add(b.dataset.p); paintXd(); });
 ['xdFrom', 'xdTo'].forEach((id) => $(id).addEventListener('change', () => { XD.from = $('xdFrom').value; XD.to = $('xdTo').value; paintXd(); }));
@@ -1956,10 +1960,26 @@ function loadScript(src, test) { return test() ? Promise.resolve() : new Promise
 async function toDataURL(url) {
   try { const r = await fetch(new URL(url, document.baseURI).href, { mode: 'cors' }); if (!r.ok) return null; const b = await r.blob(); return await new Promise((res) => { const f = new FileReader(); f.onload = () => res(f.result); f.readAsDataURL(b); }); } catch { return null; }
 }
-async function sunPng(size = 512) {
-  const img = new Image(); img.src = sunDataURI();
+async function sunPng(size = 512, light = false) {
+  const img = new Image();
+  img.src = light ? sunDataURI().replace(/%23e8f6ff/gi, '%237dbdea').replace(/%238ccbf4/gi, '%233487c9').replace(/%234a98d4/gi, '%2319588f').replace(/%23bfe5ff/gi, '%235aa2da') : sunDataURI();
   await new Promise((r) => { img.onload = img.onerror = r; });
   const c = document.createElement('canvas'); c.width = c.height = size; c.getContext('2d').drawImage(img, 0, 0, size, size);
+  return c.toDataURL('image/png');
+}
+// recorte quadrado no centro, cantos arredondados (fundo transparente): nada amassa
+async function squarePhoto(url, size = 440, radius = 0.12) {
+  const src = await toDataURL(url);
+  if (!src) return null;
+  const img = new Image(); img.src = src;
+  await new Promise((r) => { img.onload = img.onerror = r; });
+  if (!img.naturalWidth) return null;
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const g = c.getContext('2d'), side = Math.min(img.naturalWidth, img.naturalHeight);
+  const sx = (img.naturalWidth - side) / 2, sy = Math.max(0, (img.naturalHeight - side) * 0.3);
+  const rr = size * radius;
+  g.beginPath(); g.moveTo(rr, 0); g.arcTo(size, 0, size, size, rr); g.arcTo(size, size, 0, size, rr); g.arcTo(0, size, 0, 0, rr); g.arcTo(0, 0, size, 0, rr); g.closePath(); g.clip();
+  g.drawImage(img, sx, sy, side, side, 0, 0, size, size);
   return c.toDataURL('image/png');
 }
 const wxWord = (r) => (r ? WXL[r.c] || 'Tempo' : '—');
@@ -1967,12 +1987,15 @@ async function exportPptx() {
   toast('Montando o PowerPoint…');
   await loadScript('https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js', () => window.PptxGenJS);
   const what = xdWhat(), evs = xdEvents(), [a, b] = xdRange(), cities = xdCities();
-  const C = { bg: '050506', panel: '111214', line: '24262A', ink: 'F3F5F7', ink2: 'C5CAD0', muted: '8B9198', accent: '8CCBF4', accent2: '4A98D4', down: 'EAA39B' };
+  const light = XD.theme === 'light';
+  const C = light
+    ? { bg: 'F4F6F8', panel: 'FFFFFF', line: 'DCE1E7', ink: '0B0E12', ink2: '2F353C', muted: '626970', accent: '1C69A6', accent2: '3487C9', down: 'B04F47' }
+    : { bg: '050506', panel: '111214', line: '24262A', ink: 'F3F5F7', ink2: 'C5CAD0', muted: '8B9198', accent: '8CCBF4', accent2: '4A98D4', down: 'EAA39B' };
   const F = 'Segoe UI';
   const pptx = new PptxGenJS();
   pptx.layout = 'LAYOUT_WIDE'; // 13,33 x 7,5 pol
   pptx.author = 'Revenue · Grupo JCA'; pptx.company = 'Grupo JCA'; pptx.title = `Radar de Demanda · ${periodName()}`;
-  const logo = await sunPng();
+  const logo = await sunPng(512, light);
   pptx.defineSlideMaster({ title: 'HELIOS', background: { color: C.bg },
     objects: [
       { image: { data: logo, x: 0.5, y: 0.32, w: 0.34, h: 0.34 } },
@@ -1991,7 +2014,7 @@ async function exportPptx() {
   // capa
   let s = pptx.addSlide();
   s.background = { color: C.bg };
-  s.addShape(pptx.ShapeType.ellipse, { x: 7.6, y: -2.2, w: 8, h: 8, fill: { color: C.accent2, transparency: 88 }, line: { type: 'none' } });
+  s.addShape(pptx.ShapeType.ellipse, { x: 7.6, y: -2.2, w: 8, h: 8, fill: { color: C.accent2, transparency: light ? 90 : 88 }, line: { type: 'none' } });
   s.addImage({ data: logo, x: 0.8, y: 1.2, w: 1.5, h: 1.5 });
   s.addText('HELIOS', { x: 0.8, y: 2.9, w: 8, h: 0.4, fontFace: F, fontSize: 14, bold: true, color: C.ink2, charSpacing: 10 });
   s.addText('Radar de Demanda', { x: 0.8, y: 3.35, w: 11, h: 1.1, fontFace: F, fontSize: 54, bold: true, color: C.ink });
@@ -2055,13 +2078,15 @@ async function exportPptx() {
       const part = top.slice(p, p + 4);
       for (let i = 0; i < part.length; i++) {
         const e = part[i], x = 0.5 + (i % 2) * 6.25, y = 2.15 + Math.floor(i / 2) * 2.4;
-        const ph = e.img ? await toDataURL(e.img.f) : null;
-        if (ph) s.addImage({ data: ph, x, y, w: 2.9, h: 2.1, sizing: { type: 'cover', w: 2.9, h: 2.1 }, rounding: false });
-        else s.addShape(pptx.ShapeType.rect, { x, y, w: 2.9, h: 2.1, fill: { color: C.panel }, line: { type: 'none' } });
-        s.addText(`${range(e)} · ${place(e)}`.toUpperCase(), { x: x + 3.1, y, w: 2.9, h: 0.5, fontFace: F, fontSize: 9, color: C.muted, charSpacing: 1, valign: 'top' });
-        s.addText(e.n, { x: x + 3.1, y: y + 0.45, w: 2.9, h: 0.9, fontFace: F, fontSize: 15, bold: true, color: C.ink, valign: 'top' });
-        s.addText(`Pressão ${e.i} · ${level(e.i)}`, { x: x + 3.1, y: y + 1.35, w: 2.9, h: 0.3, fontFace: F, fontSize: 11, color: e.i >= HI ? C.accent : C.ink2 });
-        if (e.s) s.addText(e.s.length > 150 ? `${e.s.slice(0, 147)}…` : e.s, { x: x + 3.1, y: y + 1.65, w: 2.9, h: 0.6, fontFace: F, fontSize: 9, color: C.muted, valign: 'top' });
+        const Q = 1.75; // foto quadrada, 1:1
+        const ph = e.img ? await squarePhoto(e.img.f) : null;
+        if (ph) s.addImage({ data: ph, x, y, w: Q, h: Q });
+        else s.addShape(pptx.ShapeType.roundRect, { x, y, w: Q, h: Q, fill: { color: C.panel }, line: { color: C.line, width: 0.75 }, rectRadius: 0.2 });
+        const tx = x + Q + 0.25, tw = 6.0 - Q - 0.25;
+        s.addText(`${range(e)} · ${place(e)}`.toUpperCase(), { x: tx, y, w: tw, h: 0.4, fontFace: F, fontSize: 9, color: C.muted, charSpacing: 1, valign: 'top' });
+        s.addText(e.n, { x: tx, y: y + 0.36, w: tw, h: 0.75, fontFace: F, fontSize: 15, bold: true, color: C.ink, valign: 'top' });
+        s.addText(`Pressão ${e.i} · ${level(e.i)}`, { x: tx, y: y + 1.1, w: tw, h: 0.3, fontFace: F, fontSize: 11, color: e.i >= HI ? C.accent : C.ink2 });
+        if (e.s) s.addText(e.s.length > 170 ? `${e.s.slice(0, 167)}…` : e.s, { x: tx, y: y + 1.4, w: tw, h: 0.7, fontFace: F, fontSize: 9, color: C.muted, valign: 'top' });
       }
     }
   }
